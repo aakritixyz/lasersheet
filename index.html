@@ -4,1315 +4,1518 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LaserSheet — DRDO SSPL</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Sans:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #080c10;
-    --surface: #0d1117;
-    --surface2: #111820;
-    --border: #1e2d3d;
-    --border2: #243447;
-    --cyan: #00d4ff;
-    --cyan-dim: #00d4ff33;
-    --green: #00ff88;
-    --green-dim: #00ff8822;
-    --amber: #ffaa00;
-    --amber-dim: #ffaa0022;
-    --red: #ff4444;
-    --red-dim: #ff444422;
-    --text: #c9d1d9;
-    --text-dim: #6e7681;
-    --text-bright: #e6edf3;
-    --mono: 'Share Tech Mono', monospace;
-    --head: 'Rajdhani', sans-serif;
-    --body: 'Inter', sans-serif;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--body);
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* ── SCAN LINE OVERLAY ── */
-  body::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,212,255,0.015) 2px, rgba(0,212,255,0.015) 4px);
-    pointer-events: none;
-    z-index: 9999;
-  }
-
-  /* ── LOGIN PAGE ── */
-  #login-page {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: radial-gradient(ellipse at 50% 0%, #001a2e 0%, var(--bg) 70%);
-  }
-
-  .login-box {
-    width: 420px;
-    border: 1px solid var(--border2);
-    background: var(--surface);
-    padding: 48px;
-    position: relative;
-    animation: fadeUp 0.6s ease;
-  }
-
-  .login-box::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-  }
-
-  .login-logo {
-    font-family: var(--head);
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--cyan);
-    letter-spacing: 4px;
-    margin-bottom: 4px;
-  }
-
-  .login-sub {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 2px;
-    margin-bottom: 40px;
-  }
-
-  .field-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-    margin-bottom: 8px;
-    display: block;
-  }
-
-  .field-input {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border2);
-    color: var(--text-bright);
-    font-family: var(--mono);
-    font-size: 14px;
-    padding: 12px 16px;
-    outline: none;
-    transition: border-color 0.2s;
-    margin-bottom: 24px;
-  }
-
-  .field-input:focus { border-color: var(--cyan); }
-
-  .field-select {
-    width: 100%;
-    background: var(--bg);
-    border: 1px solid var(--border2);
-    color: var(--text-bright);
-    font-family: var(--mono);
-    font-size: 14px;
-    padding: 12px 16px;
-    outline: none;
-    margin-bottom: 32px;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300d4ff' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 16px center;
-  }
-
-  .btn-primary {
-    width: 100%;
-    background: transparent;
-    border: 1px solid var(--cyan);
-    color: var(--cyan);
-    font-family: var(--head);
-    font-size: 16px;
-    font-weight: 600;
-    letter-spacing: 3px;
-    padding: 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .btn-primary::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--cyan);
-    transform: translateX(-100%);
-    transition: transform 0.2s;
-    z-index: -1;
-  }
-
-  .btn-primary:hover { color: var(--bg); }
-  .btn-primary:hover::before { transform: translateX(0); }
-
-  /* ── MAIN APP ── */
-  #app { display: none; }
-
-  /* ── TOP BAR ── */
-  .topbar {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 32px;
-    height: 56px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-
-  .topbar-logo {
-    font-family: var(--head);
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--cyan);
-    letter-spacing: 3px;
-  }
-
-  .topbar-info {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-  }
-
-  .live-dot {
-    width: 6px; height: 6px;
-    background: var(--green);
-    border-radius: 50%;
-    animation: pulse 2s infinite;
-    display: inline-block;
-    margin-right: 6px;
-  }
-
-  .topbar-user {
-    background: var(--cyan-dim);
-    border: 1px solid var(--cyan);
-    color: var(--cyan);
-    font-family: var(--mono);
-    font-size: 11px;
-    padding: 4px 12px;
-    letter-spacing: 1px;
-  }
-
-  /* ── DASHBOARD ── */
-  #dashboard-page {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 40px 32px;
-  }
-
-  .page-title {
-    font-family: var(--head);
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--text-bright);
-    letter-spacing: 2px;
-    margin-bottom: 4px;
-  }
-
-  .page-sub {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 1px;
-    margin-bottom: 32px;
-  }
-
-  .dash-actions {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-  }
-
-  .btn-new {
-    background: var(--cyan);
-    border: none;
-    color: var(--bg);
-    font-family: var(--head);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    padding: 12px 28px;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-
-  .btn-new:hover { opacity: 0.85; }
-
-  .btn-ghost {
-    background: transparent;
-    border: 1px solid var(--border2);
-    color: var(--text-dim);
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 1px;
-    padding: 12px 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); }
-
-  .runs-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 16px;
-  }
-
-  .run-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 24px;
-    cursor: pointer;
-    transition: border-color 0.2s, transform 0.2s;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .run-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0;
-    width: 3px; height: 100%;
-    background: var(--cyan);
-    transform: scaleY(0);
-    transition: transform 0.2s;
-    transform-origin: top;
-  }
-
-  .run-card:hover { border-color: var(--cyan); transform: translateY(-2px); }
-  .run-card:hover::before { transform: scaleY(1); }
-
-  .run-id {
-    font-family: var(--mono);
-    font-size: 13px;
-    color: var(--cyan);
-    margin-bottom: 8px;
-  }
-
-  .run-name {
-    font-family: var(--head);
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text-bright);
-    margin-bottom: 12px;
-    letter-spacing: 1px;
-  }
-
-  .run-meta {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    display: flex;
-    gap: 16px;
-  }
-
-  .progress-bar {
-    margin-top: 16px;
-    height: 3px;
-    background: var(--border);
-    position: relative;
-  }
-
-  .progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, var(--cyan), var(--green));
-    transition: width 0.5s ease;
-  }
-
-  .empty-state {
-    text-align: center;
-    padding: 80px 40px;
-    color: var(--text-dim);
-    font-family: var(--mono);
-    font-size: 13px;
-    border: 1px dashed var(--border);
-    letter-spacing: 1px;
-  }
-
-  /* ── RUNSHEET PAGE ── */
-  #runsheet-page {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 40px 32px;
-    display: none;
-  }
-
-  .rs-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    margin-bottom: 32px;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .rs-back {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--text-dim);
-    cursor: pointer;
-    letter-spacing: 1px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 12px;
-    transition: color 0.2s;
-  }
-
-  .rs-back:hover { color: var(--cyan); }
-
-  .rs-title {
-    font-family: var(--head);
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--text-bright);
-    letter-spacing: 2px;
-  }
-
-  .rs-run-id {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--cyan);
-    letter-spacing: 1px;
-  }
-
-  .rs-actions {
-    display: flex;
-    gap: 12px;
-  }
-
-  .btn-print {
-    background: transparent;
-    border: 1px solid var(--green);
-    color: var(--green);
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 1px;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-
-  .btn-print:hover { background: var(--green-dim); }
-
-  /* ── STEP CARDS ── */
-  .step-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    margin-bottom: 16px;
-    overflow: hidden;
-    transition: border-color 0.2s;
-  }
-
-  .step-card.active { border-color: var(--cyan); }
-  .step-card.completed { border-color: var(--green); }
-  .step-card.failed { border-color: var(--red); }
-  .step-card.rework { border-color: var(--amber); }
-
-  .step-header {
-    padding: 16px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    cursor: pointer;
-    background: var(--surface2);
-    transition: background 0.2s;
-  }
-
-  .step-header:hover { background: #161e28; }
-
-  .step-num {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    min-width: 40px;
-    letter-spacing: 1px;
-  }
-
-  .step-title-text {
-    font-family: var(--head);
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-bright);
-    letter-spacing: 1px;
-    flex: 1;
-  }
-
-  .step-status-badge {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 2px;
-    padding: 3px 10px;
-    border: 1px solid;
-  }
-
-  .badge-pending { border-color: var(--border2); color: var(--text-dim); }
-  .badge-in-progress { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-dim); }
-  .badge-pass { border-color: var(--green); color: var(--green); background: var(--green-dim); }
-  .badge-fail { border-color: var(--red); color: var(--red); background: var(--red-dim); }
-  .badge-rework { border-color: var(--amber); color: var(--amber); background: var(--amber-dim); }
-
-  .step-body {
-    padding: 24px;
-    display: none;
-    border-top: 1px solid var(--border);
-  }
-
-  .step-body.open { display: block; animation: fadeDown 0.2s ease; }
-
-  .step-fixed {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    padding: 16px;
-    margin-bottom: 24px;
-    font-family: var(--mono);
-    font-size: 12px;
-    line-height: 1.8;
-    color: var(--text-dim);
-  }
-
-  .step-fixed-title {
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-    margin-bottom: 8px;
-    opacity: 0.6;
-  }
-
-  .fixed-row { display: flex; gap: 8px; }
-  .fixed-key { color: var(--cyan); min-width: 100px; }
-  .fixed-val { color: var(--text); }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-
-  .form-field { display: flex; flex-direction: column; gap: 6px; }
-  .form-field.full { grid-column: 1 / -1; }
-
-  .form-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--text-dim);
-  }
-
-  .form-input, .form-textarea, .form-sel {
-    background: var(--bg);
-    border: 1px solid var(--border2);
-    color: var(--text-bright);
-    font-family: var(--mono);
-    font-size: 13px;
-    padding: 10px 14px;
-    outline: none;
-    transition: border-color 0.2s;
-    width: 100%;
-  }
-
-  .form-input:focus, .form-textarea:focus, .form-sel:focus { border-color: var(--cyan); }
-  .form-textarea { resize: vertical; min-height: 80px; }
-
-  .form-sel {
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300d4ff' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-  }
-
-  .step-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 20px;
-    padding-top: 20px;
-    border-top: 1px solid var(--border);
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .last-updated {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    letter-spacing: 1px;
-  }
-
-  .btn-save {
-    background: var(--cyan);
-    border: none;
-    color: var(--bg);
-    font-family: var(--head);
-    font-size: 14px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    padding: 10px 28px;
-    cursor: pointer;
-    transition: opacity 0.2s;
-  }
-
-  .btn-save:hover { opacity: 0.85; }
-  .btn-save:disabled { opacity: 0.4; cursor: not-allowed; }
-
-  /* ── PRINT VIEW ── */
-  #print-page {
-    display: none;
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 40px 32px;
-  }
-
-  /* ── COLLABORATORS BAR ── */
-  .collab-bar {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    padding: 12px 24px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text-dim);
-    flex-wrap: wrap;
-  }
-
-  .collab-chip {
-    background: var(--cyan-dim);
-    border: 1px solid var(--cyan);
-    color: var(--cyan);
-    padding: 3px 10px;
-    font-size: 11px;
-    letter-spacing: 1px;
-    animation: fadeIn 0.3s ease;
-  }
-
-  /* ── NEW RUN MODAL ── */
-  .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 200;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(4px);
-  }
-
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--surface);
-    border: 1px solid var(--border2);
-    padding: 40px;
-    width: 480px;
-    position: relative;
-    animation: fadeUp 0.3s ease;
-  }
-
-  .modal::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, var(--cyan), transparent);
-  }
-
-  .modal-title {
-    font-family: var(--head);
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--text-bright);
-    letter-spacing: 2px;
-    margin-bottom: 24px;
-  }
-
-  .modal-close {
-    position: absolute;
-    top: 16px; right: 20px;
-    background: none; border: none;
-    color: var(--text-dim); font-size: 20px;
-    cursor: pointer; line-height: 1;
-  }
-
-  /* ── TOAST ── */
-  .toast {
-    position: fixed;
-    bottom: 32px; right: 32px;
-    background: var(--surface);
-    border: 1px solid var(--green);
-    color: var(--green);
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 1px;
-    padding: 12px 20px;
-    z-index: 9000;
-    animation: slideIn 0.3s ease;
-    display: none;
-  }
-
-  .toast.error { border-color: var(--red); color: var(--red); }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeDown {
-    from { opacity: 0; transform: translateY(-8px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; } to { opacity: 1; }
-  }
-  @keyframes pulse {
-    0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
-  }
-  @keyframes slideIn {
-    from { transform: translateX(40px); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-  }
-
-  /* ── PRINT STYLES ── */
-  @media print {
-    body { background: white; color: black; }
-    body::before { display: none; }
-    .topbar, .rs-actions, .step-footer, .collab-bar, #dashboard-page { display: none !important; }
-    .step-body { display: block !important; }
-    .step-card { border: 1px solid #ccc; margin-bottom: 12px; page-break-inside: avoid; }
-    .step-header { background: #f5f5f5; }
-    .step-title-text, .rs-title { color: black; }
-    .step-num, .rs-run-id { color: #666; }
-    .form-input, .form-textarea, .form-sel { background: white; color: black; border-color: #ccc; }
-    .step-fixed { background: #f9f9f9; border-color: #ddd; }
-    .fixed-key { color: #0066aa; }
-    .fixed-val { color: #333; }
-  }
+:root {
+  --navy:    #1a237e;
+  --navy2:   #283593;
+  --navy3:   #3949ab;
+  --navy-lt: #e8eaf6;
+  --navy-bg: #f3f4fc;
+  --saffron: #e65100;
+  --saff2:   #f4511e;
+  --saff-lt: #fbe9e7;
+  --green:   #1b5e20;
+  --green2:  #2e7d32;
+  --green-lt:#e8f5e9;
+  --gold:    #f9a825;
+  --white:   #ffffff;
+  --off:     #fafafa;
+  --gray1:   #f5f5f5;
+  --gray2:   #eeeeee;
+  --gray3:   #e0e0e0;
+  --text:    #212121;
+  --text2:   #424242;
+  --text3:   #757575;
+  --border:  #d0d0d0;
+  --serif:   'Noto Serif', Georgia, serif;
+  --sans:    'Noto Sans', Arial, sans-serif;
+  --mono:    'Source Code Pro', monospace;
+  --shadow:  0 2px 8px rgba(0,0,0,0.10);
+  --shadow2: 0 4px 16px rgba(0,0,0,0.13);
+}
+
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: var(--sans);
+  background: var(--gray1);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── GOV TOP STRIP ── */
+.gov-strip {
+  background: var(--navy);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 48px;
+  gap: 16px;
+}
+
+.gov-strip-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.gov-emblem-circle {
+  width: 34px; height: 34px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.gov-strip-text {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  line-height: 1.4;
+  color: rgba(255,255,255,0.9);
+}
+
+.gov-strip-text strong {
+  font-weight: 700;
+  font-size: 12px;
+  color: white;
+  display: block;
+}
+
+.tricolor-bar {
+  display: flex;
+  gap: 0;
+  border-radius: 2px;
+  overflow: hidden;
+  height: 18px;
+}
+.tricolor-bar span {
+  width: 10px;
+  display: block;
+}
+.tc1 { background: #FF9933; }
+.tc2 { background: #ffffff; }
+.tc3 { background: #138808; }
+
+/* ── SITE HEADER ── */
+.site-header {
+  background: white;
+  border-bottom: 3px solid var(--saffron);
+  box-shadow: var(--shadow);
+}
+
+.site-header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.header-brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.header-logo-block {
+  width: 56px; height: 56px;
+  background: var(--navy);
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow);
+}
+
+.header-title-block {}
+
+.header-app-name {
+  font-family: var(--serif);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--navy);
+  letter-spacing: 0.5px;
+  line-height: 1;
+}
+
+.header-app-name span { color: var(--saffron); }
+
+.header-org-name {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+.header-right {
+  text-align: right;
+}
+
+.header-tagline {
+  font-family: var(--serif);
+  font-size: 13px;
+  font-style: italic;
+  color: var(--text3);
+}
+
+.header-classification {
+  display: inline-block;
+  background: var(--navy);
+  color: white;
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 2px 10px;
+  margin-top: 4px;
+}
+
+/* ── TOPNAV (logged in) ── */
+.topnav {
+  display: none;
+  background: var(--navy2);
+  padding: 0 32px;
+  height: 48px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topnav.visible { display: flex; }
+
+.tn-crumb {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: rgba(255,255,255,0.7);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tn-crumb strong { color: white; font-weight: 600; }
+
+.tn-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.live-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--green-lt);
+  border: 1px solid var(--green2);
+  color: var(--green2);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 3px 10px;
+  text-transform: uppercase;
+}
+
+.live-dot {
+  width: 6px; height: 6px;
+  background: var(--green2);
+  border-radius: 50%;
+  animation: blink 2s infinite;
+}
+
+.user-badge {
+  background: white;
+  color: var(--navy);
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 14px;
+  letter-spacing: 0.3px;
+}
+
+.btn-exit {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.4);
+  color: rgba(255,255,255,0.8);
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  padding: 4px 12px;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.2s;
+}
+.btn-exit:hover { background: rgba(255,255,255,0.1); color: white; }
+
+/* ── MAIN CONTAINER ── */
+.main-wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px;
+}
+
+/* ── LOGIN PAGE ── */
+#login-page {
+  min-height: calc(100vh - 120px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 32px;
+}
+
+.login-outer {
+  width: 100%;
+  max-width: 500px;
+}
+
+.login-notice {
+  background: var(--navy-lt);
+  border-left: 4px solid var(--navy);
+  padding: 12px 16px;
+  margin-bottom: 24px;
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--navy);
+  font-weight: 500;
+}
+
+.login-card {
+  background: white;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow2);
+}
+
+.login-card-header {
+  background: var(--navy);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.login-card-icon {
+  width: 44px; height: 44px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.login-card-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+  line-height: 1.2;
+}
+
+.login-card-sub {
+  font-family: var(--sans);
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  margin-top: 3px;
+  letter-spacing: 0.5px;
+}
+
+.login-card-body {
+  padding: 28px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text2);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.form-control {
+  width: 100%;
+  background: white;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 11px 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  border-radius: 2px;
+  -webkit-appearance: none;
+}
+
+.form-control:focus { border-color: var(--navy2); box-shadow: 0 0 0 3px rgba(26,35,126,0.08); }
+
+.form-select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%231a237e' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-color: white;
+  padding-right: 40px;
+}
+
+.form-select option { font-size: 14px; }
+
+.btn-login {
+  width: 100%;
+  background: var(--saffron);
+  border: none;
+  color: white;
+  font-family: var(--sans);
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  text-transform: uppercase;
+  margin-top: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 2px;
+}
+.btn-login:hover { background: var(--saff2); }
+
+.login-footer {
+  background: var(--gray1);
+  border-top: 1px solid var(--gray3);
+  padding: 12px 28px;
+  font-family: var(--sans);
+  font-size: 11px;
+  color: var(--text3);
+  text-align: center;
+}
+
+/* ── APP PAGES ── */
+#app { display: none; }
+
+/* ── DASHBOARD ── */
+#dashboard-page { display: block; }
+
+.page-header {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 24px 28px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  box-shadow: var(--shadow);
+}
+
+.ph-left {}
+
+.ph-eyebrow {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--saffron);
+  margin-bottom: 4px;
+}
+
+.ph-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1;
+}
+
+.ph-desc {
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--text3);
+  margin-top: 6px;
+}
+
+.ph-right {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  background: var(--navy);
+  border: none;
+  color: white;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  padding: 10px 22px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 2px;
+}
+.btn-primary:hover { background: var(--navy2); }
+
+.btn-outline {
+  background: white;
+  border: 1.5px solid var(--border);
+  color: var(--text2);
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 2px;
+}
+.btn-outline:hover { border-color: var(--navy); color: var(--navy); }
+
+/* ── RUN CARDS ── */
+.runs-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+.run-card {
+  background: white;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
+  overflow: hidden;
+}
+
+.run-card:hover {
+  box-shadow: var(--shadow2);
+  border-color: var(--navy3);
+  transform: translateY(-2px);
+}
+
+.run-card-top-bar {
+  height: 4px;
+  background: var(--navy);
+}
+
+.run-card-body { padding: 20px 20px 16px; }
+
+.rc-number {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--saffron);
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.rc-name {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.rc-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.rc-tag {
+  background: var(--navy-lt);
+  color: var(--navy);
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 2px 9px;
+  text-transform: uppercase;
+  border-radius: 1px;
+}
+
+.rc-progress-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  background: var(--gray1);
+  border-top: 1px solid var(--gray3);
+}
+
+.rc-progress-bar-wrap { flex: 1; }
+.rc-progress-label {
+  font-family: var(--sans);
+  font-size: 10px;
+  color: var(--text3);
+  font-weight: 600;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+.rc-progress-track {
+  height: 5px;
+  background: var(--gray3);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.rc-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--navy2), var(--saffron));
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+.rc-arrow {
+  color: var(--navy3);
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+.run-card:hover .rc-arrow { transform: translateX(4px); }
+
+.empty-box {
+  grid-column: 1/-1;
+  background: white;
+  border: 2px dashed var(--gray3);
+  padding: 60px 40px;
+  text-align: center;
+  color: var(--text3);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ── RUNSHEET ── */
+#runsheet-page { display: none; }
+
+.rs-page-header {
+  background: white;
+  border: 1px solid var(--border);
+  padding: 24px 28px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow);
+}
+
+.rs-breadcrumb {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--text3);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rs-bc-link {
+  color: var(--navy);
+  cursor: pointer;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.rs-bc-link:hover { color: var(--saffron); }
+
+.rs-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.rs-code {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--saffron);
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.rs-title {
+  font-family: var(--serif);
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.1;
+}
+
+.rs-meta {
+  font-family: var(--sans);
+  font-size: 12px;
+  color: var(--text3);
+  margin-top: 8px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.rs-meta span::before { content: '· '; }
+.rs-meta span:first-child::before { content: ''; }
+
+.btn-print {
+  background: var(--green2);
+  border: none;
+  color: white;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+.btn-print:hover { background: var(--green); }
+
+/* ── PRESENCE BAR ── */
+.presence-panel {
+  background: var(--green-lt);
+  border: 1px solid #a5d6a7;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.presence-label {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--green2);
+  flex-shrink: 0;
+}
+
+.presence-chip {
+  background: white;
+  border: 1px solid #a5d6a7;
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 10px;
+  animation: popIn 0.25s ease;
+}
+
+/* ── STEPS ── */
+.step-card {
+  background: white;
+  border: 1px solid var(--border);
+  margin-bottom: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  overflow: hidden;
+}
+
+.step-card.s-progress { border-left: 4px solid var(--gold); }
+.step-card.s-pass     { border-left: 4px solid var(--green2); }
+.step-card.s-fail     { border-left: 4px solid #c62828; }
+.step-card.s-rework   { border-left: 4px solid #f57f17; }
+
+.step-header {
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: none;
+  background: white;
+}
+.step-header:hover { background: var(--navy-bg); }
+
+.step-num-badge {
+  background: var(--navy);
+  color: white;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  min-width: 60px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.step-title-text {
+  font-family: var(--sans);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy);
+  flex: 1;
+  letter-spacing: 0.2px;
+}
+
+.step-badge {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 12px;
+  border: 1.5px solid;
+  border-radius: 1px;
+  white-space: nowrap;
+}
+.sb-pending   { border-color: var(--gray3); color: var(--text3); background: var(--gray1); }
+.sb-in_progress { border-color: var(--gold); color: #7b5800; background: #fffde7; }
+.sb-pass      { border-color: var(--green2); color: var(--green); background: var(--green-lt); }
+.sb-fail      { border-color: #c62828; color: #c62828; background: #ffebee; }
+.sb-rework    { border-color: #f57f17; color: #7b3f00; background: #fff8e1; }
+
+.step-chevron {
+  color: var(--text3);
+  font-size: 16px;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.step-body {
+  border-top: 1px solid var(--gray2);
+  padding: 24px;
+  display: none;
+  background: var(--off);
+}
+.step-body.open { display: block; animation: slideOpen 0.2s ease; }
+.step-body.open + .step-header .step-chevron,
+.open-card .step-chevron { transform: rotate(90deg); }
+
+/* fixed params */
+.ref-params {
+  background: var(--navy-lt);
+  border-left: 4px solid var(--navy);
+  padding: 14px 18px;
+  margin-bottom: 22px;
+  font-family: var(--sans);
+  font-size: 13px;
+}
+
+.rp-heading {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--navy2);
+  margin-bottom: 10px;
+}
+
+.rp-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 4px;
+  line-height: 1.5;
+}
+
+.rp-key {
+  font-weight: 700;
+  color: var(--navy);
+  min-width: 80px;
+  flex-shrink: 0;
+  font-size: 12px;
+}
+
+.rp-val {
+  color: var(--text2);
+  font-size: 13px;
+}
+
+/* live entry form */
+.live-form-header {
+  font-family: var(--sans);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--saffron);
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1.5px solid var(--gray3);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px 18px;
+  margin-bottom: 8px;
+}
+
+.fg { display: flex; flex-direction: column; gap: 5px; }
+.fg.span2 { grid-column: 1/-1; }
+
+.fg label {
+  font-family: var(--sans);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text3);
+}
+
+.fg input, .fg textarea, .fg select {
+  background: white;
+  border: 1.5px solid var(--border);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 9px 12px;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+  border-radius: 2px;
+  -webkit-appearance: none;
+}
+
+.fg input:focus, .fg textarea:focus, .fg select:focus {
+  border-color: var(--navy2);
+  box-shadow: 0 0 0 3px rgba(26,35,126,0.08);
+}
+
+.fg textarea { resize: vertical; min-height: 76px; }
+
+.fg select {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%231a237e' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-color: white;
+}
+
+.step-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1.5px solid var(--gray3);
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.step-timestamp {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.btn-save {
+  background: var(--saffron);
+  border: none;
+  color: white;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 10px 28px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-radius: 2px;
+}
+.btn-save:hover { background: var(--saff2); }
+.btn-save:disabled { opacity: 0.45; cursor: not-allowed; }
+
+/* ── MODAL ── */
+.modal-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 300;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+}
+.modal-backdrop.open { display: flex; }
+
+.modal-box {
+  background: white;
+  width: 480px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.2);
+  animation: popIn 0.25s ease;
+  overflow: hidden;
+}
+
+.modal-head {
+  background: var(--navy);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: white;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: rgba(255,255,255,0.7);
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.modal-close:hover { color: white; }
+
+.modal-body { padding: 28px 24px 24px; }
+
+/* ── TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: var(--navy);
+  color: white;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 20px;
+  z-index: 9000;
+  display: none;
+  box-shadow: var(--shadow2);
+  animation: slideUp 0.3s ease;
+  border-left: 4px solid var(--saffron);
+  min-width: 240px;
+}
+.toast.err { border-left-color: #c62828; }
+.toast.ok { border-left-color: var(--green2); }
+
+/* ── FOOTER ── */
+.site-footer {
+  background: var(--navy);
+  color: rgba(255,255,255,0.6);
+  text-align: center;
+  padding: 16px 32px;
+  font-family: var(--sans);
+  font-size: 11px;
+  margin-top: 48px;
+  letter-spacing: 0.5px;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes blink    { 0%,100%{opacity:1} 50%{opacity:0.2} }
+@keyframes popIn    { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
+@keyframes slideUp  { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+@keyframes slideOpen{ from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+
+/* ── PRINT ── */
+@media print {
+  .gov-strip, .topnav, .rs-breadcrumb, .rs-title-row .btn-print,
+  .presence-panel, .step-foot, .site-footer { display: none !important; }
+  body { background: white; }
+  .step-body { display: block !important; border-top: 1px solid #ddd; }
+  .step-card { border: 1px solid #ccc; margin-bottom: 10px; page-break-inside: avoid; box-shadow: none; }
+  .step-header { background: #f0f4ff; }
+  .ref-params { background: #f5f5ff; }
+  .fg input, .fg textarea, .fg select { border-color: #ddd; }
+  #dashboard-page { display: none !important; }
+  .main-wrap { padding: 0; max-width: 100%; }
+}
 </style>
 </head>
 <body>
 
-<!-- ══ LOGIN PAGE ══ -->
+<!-- GOV STRIP -->
+<div class="gov-strip">
+  <div class="gov-strip-left">
+    <div class="gov-emblem-circle">🦁</div>
+    <div class="gov-strip-text">
+      <strong>Government of India — Ministry of Defence</strong>
+      Defence Research & Development Organisation (DRDO)
+    </div>
+  </div>
+  <div class="tricolor-bar">
+    <span class="tc1"></span>
+    <span class="tc2" style="border-top:1px solid #ddd;border-bottom:1px solid #ddd;"></span>
+    <span class="tc3"></span>
+  </div>
+</div>
+
+<!-- SITE HEADER -->
+<div class="site-header">
+  <div class="site-header-inner">
+    <div class="header-brand">
+      <div class="header-logo-block">⚛️</div>
+      <div class="header-title-block">
+        <div class="header-app-name">Laser<span>Sheet</span></div>
+        <div class="header-org-name">DRDO · Solid State Physics Laboratory, New Delhi</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="header-tagline">Laser Fabrication Process Tracking & Documentation</div>
+      <div class="header-classification">Restricted — Internal Use Only</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOPNAV (shown when logged in) -->
+<div class="topnav" id="topnav">
+  <div class="tn-crumb">
+    <span>LaserSheet</span>
+    <span>›</span>
+    <strong id="tn-section">Dashboard</strong>
+  </div>
+  <div class="tn-right">
+    <div class="live-indicator"><div class="live-dot"></div> Live Sync</div>
+    <div class="user-badge" id="user-badge"></div>
+    <button class="btn-exit" onclick="doLogout()">Sign Out</button>
+  </div>
+</div>
+
+<!-- ════ LOGIN ════ -->
 <div id="login-page">
-  <div class="login-box">
-    <div class="login-logo">LASERSHEET</div>
-    <div class="login-sub">DRDO SSPL · LASER FABRICATION TRACKING</div>
-    <label class="field-label">OPERATOR NAME</label>
-    <input class="field-input" id="login-name" type="text" placeholder="Enter your name" autocomplete="off">
-    <label class="field-label">ROLE</label>
-    <select class="field-select" id="login-role">
-      <option value="Operator">Operator</option>
-      <option value="Senior Operator">Senior Operator</option>
-      <option value="Supervisor">Supervisor</option>
-      <option value="Engineer">Engineer</option>
-      <option value="Scientist">Scientist</option>
-    </select>
-    <button class="btn-primary" onclick="doLogin()">ENTER LASERSHEET →</button>
+  <div class="login-outer">
+    <div class="login-notice">
+      🔒 This system is for authorised DRDO SSPL personnel only. Unauthorised access is prohibited.
+    </div>
+    <div class="login-card">
+      <div class="login-card-header">
+        <div class="login-card-icon">📋</div>
+        <div>
+          <div class="login-card-title">Operator Sign In</div>
+          <div class="login-card-sub">LaserSheet · DRDO SSPL Fabrication Tracking</div>
+        </div>
+      </div>
+      <div class="login-card-body">
+        <div class="form-group">
+          <label class="form-label" for="login-name">Full Name</label>
+          <input class="form-control" id="login-name" type="text" placeholder="Enter your full name" autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="login-role">Role / Designation</label>
+          <select class="form-control form-select" id="login-role">
+            <option value="Operator">Operator</option>
+            <option value="Senior Operator">Senior Operator</option>
+            <option value="Supervisor">Supervisor</option>
+            <option value="Engineer">Engineer</option>
+            <option value="Scientist">Scientist</option>
+            <option value="Scientist-C">Scientist-C</option>
+            <option value="Scientist-D">Scientist-D</option>
+            <option value="Director">Director</option>
+          </select>
+        </div>
+        <button class="btn-login" onclick="doLogin()">Sign In &amp; Continue →</button>
+      </div>
+      <div class="login-footer">
+        For access issues contact the System Administrator · SSPL IT Cell
+      </div>
+    </div>
   </div>
 </div>
 
-<!-- ══ MAIN APP ══ -->
+<!-- ════ APP ════ -->
 <div id="app">
-  <!-- Top Bar -->
-  <div class="topbar">
-    <div class="topbar-logo">LASERSHEET</div>
-    <div class="topbar-info">
-      <span><span class="live-dot"></span>LIVE SYNC</span>
-      <span id="topbar-user" class="topbar-user"></span>
-      <button class="btn-ghost" style="padding:6px 14px;font-size:11px;" onclick="doLogout()">EXIT</button>
-    </div>
-  </div>
+  <div class="main-wrap">
 
-  <!-- Dashboard -->
-  <div id="dashboard-page">
-    <div class="page-title">FABRICATION RUNS</div>
-    <div class="page-sub">SELECT A RUN TO CONTINUE · OR START A NEW ONE</div>
-    <div class="dash-actions">
-      <button class="btn-new" onclick="openNewRunModal()">+ NEW RUN</button>
-      <button class="btn-ghost" onclick="loadRuns()">↻ REFRESH</button>
-    </div>
-    <div class="runs-grid" id="runs-grid">
-      <div class="empty-state">LOADING RUNS...</div>
-    </div>
-  </div>
-
-  <!-- Runsheet Page -->
-  <div id="runsheet-page">
-    <div class="rs-back" onclick="showDashboard()">← BACK TO RUNS</div>
-    <div class="rs-header">
-      <div>
-        <div class="rs-run-id" id="rs-run-id"></div>
-        <div class="rs-title" id="rs-title"></div>
+    <!-- Dashboard -->
+    <div id="dashboard-page">
+      <div class="page-header">
+        <div class="ph-left">
+          <div class="ph-eyebrow">Fabrication Management</div>
+          <div class="ph-title">Fabrication Runs</div>
+          <div class="ph-desc">Select a run to continue, or create a new fabrication run.</div>
+        </div>
+        <div class="ph-right">
+          <button class="btn-primary" onclick="openModal()">＋ New Run</button>
+          <button class="btn-outline" onclick="loadRuns()">↻ Refresh</button>
+        </div>
       </div>
-      <div class="rs-actions">
-        <button class="btn-print" onclick="window.print()">⎙ PRINT RUNSHEET</button>
+      <div class="runs-grid" id="runs-grid">
+        <div class="empty-box">Loading…</div>
       </div>
     </div>
-    <div class="collab-bar" id="collab-bar">
-      <span>ACTIVE NOW:</span>
-      <span id="collab-chips">—</span>
+
+    <!-- Runsheet -->
+    <div id="runsheet-page">
+      <div class="rs-page-header">
+        <div class="rs-breadcrumb">
+          <span class="rs-bc-link" onclick="showDash()">Fabrication Runs</span>
+          <span>›</span>
+          <span id="rs-bc-name">—</span>
+        </div>
+        <div class="rs-title-row">
+          <div>
+            <div class="rs-code" id="rs-code"></div>
+            <div class="rs-title" id="rs-title"></div>
+            <div class="rs-meta" id="rs-meta"></div>
+          </div>
+          <button class="btn-print" onclick="window.print()">🖨 Print Runsheet</button>
+        </div>
+      </div>
+
+      <div class="presence-panel" id="presence-panel">
+        <span class="presence-label">Active Now:</span>
+        <span id="presence-chips">—</span>
+      </div>
+
+      <div id="steps-container"></div>
     </div>
-    <div id="steps-container"></div>
+
+  </div><!-- /main-wrap -->
+</div><!-- /app -->
+
+<!-- Modal -->
+<div class="modal-backdrop" id="modal-bd">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title">New Fabrication Run</div>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Run Name / Wafer ID</label>
+        <input class="form-control" id="new-name" placeholder="e.g. SSPL-GaN-2026-047">
+      </div>
+      <div class="form-group" style="margin-top:16px">
+        <label class="form-label">Process Type</label>
+        <select class="form-control form-select" id="new-type">
+          <option>AlGaN/GaN HEMT</option>
+          <option>GaN-on-Si</option>
+          <option>Silicon Photonics</option>
+          <option>Diamond FET</option>
+          <option>Custom Process</option>
+        </select>
+      </div>
+      <button class="btn-login" onclick="createRun()" style="margin-top:20px">Create Run →</button>
+    </div>
   </div>
 </div>
 
-<!-- ══ NEW RUN MODAL ══ -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">×</button>
-    <div class="modal-title">NEW FABRICATION RUN</div>
-    <label class="field-label">RUN NAME / WAFER ID</label>
-    <input class="field-input" id="new-run-name" placeholder="e.g. DRDO-2026-047" style="margin-bottom:20px;">
-    <label class="field-label">PROCESS TYPE</label>
-    <select class="field-select" id="new-run-type" style="margin-bottom:32px;">
-      <option value="AlGaN/GaN HEMT">AlGaN/GaN HEMT</option>
-      <option value="Silicon Photonics">Silicon Photonics</option>
-      <option value="Diamond FET">Diamond FET</option>
-      <option value="Custom">Custom</option>
-    </select>
-    <button class="btn-primary" onclick="createRun()">CREATE RUN →</button>
-  </div>
-</div>
-
-<!-- ══ TOAST ══ -->
+<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<script>
-// ══════════════════════════════════════════
-// CONFIG
-// ══════════════════════════════════════════
-const SUPABASE_URL = 'https://nshngyvayyiqdklfhqlh.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zaG5neXZheXlpcWRrbGZocWxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NjU5MzEsImV4cCI6MjA5NjA0MTkzMX0.0IVmcjO-JHPFJwnTrYjLU8lItIXVyKWScsdZ8s63hhs';
-const HEADERS = {
-  'Content-Type': 'application/json',
-  'apikey': SUPABASE_KEY,
-  'Authorization': `Bearer ${SUPABASE_KEY}`,
-  'Prefer': 'return=representation'
-};
+<!-- Site Footer -->
+<div class="site-footer">
+  LaserSheet — DRDO SSPL Laser Fabrication Tracking System &nbsp;|&nbsp;
+  Solid State Physics Laboratory, Lucknow Road, Timarpur, Delhi - 110 054 &nbsp;|&nbsp;
+  For official use only
+</div>
 
-// ══════════════════════════════════════════
-// RUNSHEET STEPS (from your reference sheets)
-// ══════════════════════════════════════════
+<script>
+/* ─── CONFIG ─── */
+const SB = 'https://nshngyvayyiqdklfhqlh.supabase.co';
+const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zaG5neXZheXlpcWRrbGZocWxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NjU5MzEsImV4cCI6MjA5NjA0MTkzMX0.0IVmcjO-JHPFJwnTrYjLU8lItIXVyKWScsdZ8s63hhs';
+const H = {'Content-Type':'application/json','apikey':KEY,'Authorization':`Bearer ${KEY}`,'Prefer':'return=representation'};
+
+/* ─── STEPS ─── */
 const STEPS = [
-  {
-    num: '0', name: 'PRE-CLEAN',
-    tool: 'wbclean / wbflexcorr', recipe: 'SC1 + HF Dip + SC2',
-    params: 'SC1: 5:1:1 H2O:H2O2:NH4OH @ 50°C, 10 min | HF dip: 50:1 DI:HF @ RT, 30 sec | SC2: 5:1:1 H2O:H2O2:HCl @ 50°C, 10 min',
-    fields: ['operator_name','date_time','measurements','comments','status']
-  },
-  {
-    num: '1', name: 'EPITAXY / MOCVD GROWTH',
-    tool: 'aix-ccs (MOCVD)', recipe: 'See log book for conditions',
-    params: 'AlGaN/GaN heterostructure growth on Si or SiC substrate | Check recipe in MOCVD log book | Season chamber before run',
-    fields: ['operator_name','date_time','tool_used','recipe','measurements','comments','status']
-  },
-  {
-    num: '2', name: 'SPIN & BAKE (RESIST COAT)',
-    tool: 'Headway spinner / hotplate', recipe: 'SPR3612 or CSAR 62.09',
-    params: 'Dehydration bake: 3 min @ 180°C or 5 min @ 150°C | Spin: 60s @ 6000 RPM, 2000 RPM/s ramp | Soft bake: 1 min @ 90°C | Use carrier wafer',
-    fields: ['operator_name','date_time','tool_used','recipe','measurements','comments','status']
-  },
-  {
-    num: '3', name: 'LITHOGRAPHY (EXPOSURE)',
-    tool: 'Heidelberg / JEOL e-beam', recipe: 'Uploaded layout',
-    params: 'JEOL: 4 nm shot size, 320 µC/cm² dose | Heidelberg: 80/-2 focus offset | Align to previous layer | Layer ID per process spec',
-    fields: ['operator_name','date_time','tool_used','recipe','parameters','measurements','comments','status']
-  },
-  {
-    num: '4', name: 'POST-EXPOSE BAKE & DEVELOP',
-    tool: 'hotplate / wbdev / teflon baskets', recipe: 'MF26A or Xylenes/IPA',
-    params: 'Post exp bake: 1 min @ 115°C | Develop: 40s Xylenes, 10s IPA, gentle N2 blow dry | Inspect under microscope for pattern quality',
-    fields: ['operator_name','date_time','tool_used','recipe','measurements','comments','status']
-  },
-  {
-    num: '5', name: 'INSPECTION',
-    tool: 'microscope / SEM', recipe: '—',
-    params: 'Check pattern resolution, alignment, edge quality | Inspect all wafers | Document defects | PASS to continue, REWORK to re-spin',
-    fields: ['operator_name','date_time','tool_used','measurements','comments','status']
-  },
-  {
-    num: '6', name: 'PLASMA ETCH (DRY)',
-    tool: 'oxford-rie / oxford-35 / lampoly', recipe: 'XlabGaNslowetch / chamberclean',
-    params: 'AlGaN/GaN etch: 1 min, 45 sec, 75 sec etch time | GaN etch rate ~50 nm/min | Clean chamber 1–4 hrs before run | Season 10–15 min | Descum: drytek2, 90 sec',
-    fields: ['operator_name','date_time','tool_used','recipe','parameters','measurements','comments','status']
-  },
-  {
-    num: '7', name: 'PIRANHA CLEAN',
-    tool: 'wbflexcorr', recipe: '9:1 H2SO4:H2O2',
-    params: '9:1 sulfuric acid:hydrogen peroxide, ~120°C, 15–20 min | Dump rinse after | Use teflon chip holder | Keep thermometer in contaminated beaker | SC1 & SC2 @ 50°C, 10 min each | DI rinse after',
-    fields: ['operator_name','date_time','measurements','comments','status']
-  },
-  {
-    num: '8', name: 'ALD / PASSIVATION',
-    tool: 'Fiji2 (ALD)', recipe: 'Thermal Al2O3, 250°C',
-    params: 'Season ALD chamber first | Rinse clean: Acetone/IPA, 2 min | Deposition: ~90 min, 200–250 cycles (~20–25 nm Al2O3) | 1200 sec wait time | Inspect: surface should have yellow hue',
-    fields: ['operator_name','date_time','tool_used','recipe','measurements','comments','status']
-  },
-  {
-    num: '9', name: 'METAL EVAPORATION (OHMIC)',
-    tool: 'AJA evaporator', recipe: 'Ti/Al/Pt/Au or Ti/Al/Ni/Au',
-    params: 'Ohmic contacts: Ti/Al/Pt/Au 20/100/40/80 nm | Max deposition rate 1 Å/sec | O-plasma clean 90 sec @ 100W before load | Check vacuum < 5×10⁻⁷ Torr',
-    fields: ['operator_name','date_time','tool_used','recipe','parameters','measurements','comments','status']
-  },
-  {
-    num: '10', name: 'LIFTOFF',
-    tool: 'wbflexsolv', recipe: '1165 remover / Acetone/IPA',
-    params: 'Submerge in 1165 remover for 10 min | Quickly spray acetone to remove metal | Rinse with IPA | Solvent soak overnight if needed | 10s sonication before AMI if necessary | DI rinse after | Inspect under microscope',
-    fields: ['operator_name','date_time','measurements','comments','status']
-  },
-  {
-    num: '11', name: 'RTA (RAPID THERMAL ANNEAL)',
-    tool: 'awin_r (RTA)', recipe: 'Recipe P',
-    params: '850°C, 35 sec | Run dummies first | Ohmic contact anneal for AlGaN/GaN HEMT | Verify contact resistance after anneal with TLM measurement',
-    fields: ['operator_name','date_time','tool_used','recipe','parameters','measurements','comments','status']
-  },
-  {
-    num: '12', name: 'MESA ETCH LITHOGRAPHY',
-    tool: 'Headway / hotplate / Heidelberg', recipe: 'SPR3612',
-    params: 'Dehydrate: 5 min @ 150°C | HMDS: 30 min YES oven | Spin resist: 60s @ 5000 RPM | Pre-bake: 1 min @ 90°C | Expose (Heidelberg 80/-2) | Post exp bake: 1 min @ 115°C | Develop: 1 min, water bath after | Hard bake: 5 min @ 110°C',
-    fields: ['operator_name','date_time','tool_used','recipe','measurements','comments','status']
-  },
-  {
-    num: '13', name: 'MESA ETCH (AlGaN/GaN)',
-    tool: 'oxford-35', recipe: 'XlabGaNslowetch',
-    params: '*TLM pieces only | Clean chamber 15 min | Season 15 min | AlGaN/GaN etch: 2 min (assuming ~50 nm/min etch rate) | Samples on carrier wafer with Santovac oil | Descum: drytek2, 2 min, recipe 2 | Detach pieces with acetone | Blow dry with N2',
-    fields: ['operator_name','date_time','tool_used','recipe','parameters','measurements','comments','status']
-  },
-  {
-    num: '14', name: 'GATE METAL LITHOGRAPHY & EVAPORATION',
-    tool: 'Headway / AJA', recipe: 'Ni/Au or Ti/Pt',
-    params: 'Gate contacts: 50/20 nm Ti/Pt | Spin LOL 3000 RPM @ 170°C bake | Spin resist 5000 RPM | Pre-bake 1 min @ 90°C | Expose (Heidelberg 90/-2) | Post exp bake 1 min @ 115°C | Develop 30 sec, teflon baskets | Hard bake 5 min, descum 3 min',
-    fields: ['operator_name','date_time','tool_used','recipe','parameters','measurements','comments','status']
-  },
-  {
-    num: '15', name: 'FINAL INSPECTION & CLEAVE',
-    tool: 'microscope / wafersaw', recipe: '—',
-    params: 'Visual and microscope inspection | Check all contacts, mesa regions, gate fingers | Dice into pieces using wafersaw | Dehydrate 5 min @ 115°C after dicing | SRS-100: 20 min, 60°C, DI water bath | Document final wafer map',
-    fields: ['operator_name','date_time','tool_used','measurements','comments','status']
-  },
-  {
-    num: '16', name: 'LIV / ELECTRICAL TEST',
-    tool: 'probe station / parameter analyser', recipe: '—',
-    params: 'TLM measurement for contact resistance | I-V characteristics | Transconductance (gm) | Pinch-off voltage | Breakdown voltage | Sheet resistance | Document all measurements in lab notebook',
-    fields: ['operator_name','date_time','tool_used','measurements','comments','status']
-  }
+  {n:'0',  name:'Pre-Clean',                    tool:'wbclean / wbflexcorr',            recipe:'SC1 + HF Dip + SC2',            params:'SC1: 5:1:1 H₂O:H₂O₂:NH₄OH @ 50°C, 10 min | HF dip: 50:1 DI:HF @ RT, 30 sec | SC2: 5:1:1 H₂O:H₂O₂:HCl @ 50°C, 10 min', f:['op','dt','meas','com','st']},
+  {n:'1',  name:'Epitaxy / MOCVD Growth',        tool:'aix-ccs (MOCVD)',                 recipe:'See MOCVD log book',             params:'AlGaN/GaN heterostructure on Si or SiC substrate | Season chamber before run | Confirm recipe in MOCVD log book', f:['op','dt','tool','rec','meas','com','st']},
+  {n:'2',  name:'Spin & Bake (Resist Coat)',     tool:'Headway spinner / hotplate',      recipe:'SPR3612 or CSAR 62.09',         params:'Dehydration bake: 3 min @ 180°C | Spin: 60s @ 6000 RPM, 2000 RPM/s ramp | Soft bake: 1 min @ 90°C | Use carrier wafer', f:['op','dt','tool','rec','meas','com','st']},
+  {n:'3',  name:'Lithography (Exposure)',        tool:'Heidelberg / JEOL e-beam',        recipe:'Uploaded layout file',          params:'JEOL: 4 nm shot size, 320 µC/cm² dose | Heidelberg: 80/−2 focus offset | Align to previous layer', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'4',  name:'Post-Expose Bake & Develop',   tool:'hotplate / wbdev',                recipe:'MF26A or Xylenes/IPA',          params:'Post exp bake: 1 min @ 115°C | Develop: 40s Xylenes, 10s IPA, N₂ blow dry | Inspect under microscope', f:['op','dt','tool','rec','meas','com','st']},
+  {n:'5',  name:'Inspection',                   tool:'Optical microscope / SEM',        recipe:'—',                             params:'Check pattern resolution, alignment, edge quality | Inspect all wafers | Document all defects found | PASS to continue', f:['op','dt','tool','meas','com','st']},
+  {n:'6',  name:'Plasma Etch (Dry)',             tool:'oxford-rie / oxford-35 / lampoly',recipe:'XlabGaNslowetch',               params:'AlGaN/GaN etch rate ~50 nm/min | Clean chamber 1–4 hrs before | Season 10–15 min | Descum: drytek2, 90 sec', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'7',  name:'Piranha Clean',                tool:'wbflexcorr',                      recipe:'9:1 H₂SO₄:H₂O₂',               params:'~120°C, 15–20 min | Dump rinse | Teflon chip holder required | SC1 & SC2 @ 50°C, 10 min each | DI water rinse', f:['op','dt','meas','com','st']},
+  {n:'8',  name:'ALD / Passivation',            tool:'Fiji2 (ALD)',                     recipe:'Thermal Al₂O₃, 250°C',          params:'Season ALD chamber | Rinse: Acetone/IPA, 2 min | 200–250 cycles (~20–25 nm Al₂O₃) | Surface should show yellow hue', f:['op','dt','tool','rec','meas','com','st']},
+  {n:'9',  name:'Metal Evaporation (Ohmic)',    tool:'AJA evaporator',                  recipe:'Ti/Al/Pt/Au 20/100/40/80 nm',  params:'Max 1 Å/sec deposition rate | O-plasma 90 sec @ 100W before load | Vacuum < 5×10⁻⁷ Torr before deposition', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'10', name:'Liftoff',                      tool:'wbflexsolv',                      recipe:'1165 remover / Acetone/IPA',    params:'Submerge in 1165 for 10 min | Spray acetone quickly | IPA rinse | Overnight soak if needed | Inspect under microscope', f:['op','dt','meas','com','st']},
+  {n:'11', name:'RTA (Rapid Thermal Anneal)',   tool:'awin_r (RTA)',                    recipe:'Recipe P — 850°C, 35 sec',     params:'Run dummies first | Ohmic contact anneal | Verify contact resistance via TLM measurement after anneal', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'12', name:'Mesa Etch Lithography',        tool:'Headway / hotplate / Heidelberg', recipe:'SPR3612',                       params:'Dehydrate 5 min @ 150°C | HMDS 30 min YES oven | Spin 60s @ 5000 RPM | Pre-bake 1 min @ 90°C | Hard bake 5 min @ 110°C', f:['op','dt','tool','rec','meas','com','st']},
+  {n:'13', name:'Mesa Etch (AlGaN/GaN)',        tool:'oxford-35',                       recipe:'XlabGaNslowetch',               params:'TLM pieces only | Clean 15 min | Season 15 min | Etch ~2 min @ 50 nm/min | Santovac oil on carrier wafer | Descum: drytek2, 2 min', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'14', name:'Gate Metal Litho & Evaporation',tool:'Headway / AJA',                 recipe:'Ti/Pt 50/20 nm',               params:'Spin LOL 3000 RPM @ 170°C | Resist 5000 RPM | Heidelberg 90/−2 exposure | Hard bake 5 min | Descum 3 min | AJA evaporation', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'15', name:'Final Inspection & Cleave',    tool:'Microscope / wafersaw',           recipe:'—',                             params:'Inspect contacts, mesa, gate fingers | Dice with wafersaw | Dehydrate 5 min @ 115°C after dicing | Document final wafer map', f:['op','dt','tool','meas','com','st']},
+  {n:'16', name:'LIV / Electrical Test',        tool:'Probe station / parameter analyser',recipe:'—',                          params:'TLM for contact resistance | I-V characteristics | Transconductance (gm) | Pinch-off voltage | Breakdown voltage | Record in lab notebook', f:['op','dt','tool','meas','com','st']}
 ];
 
-// ══════════════════════════════════════════
-// STATE
-// ══════════════════════════════════════════
-let currentUser = null;
-let currentRunId = null;
-let currentRunName = '';
-let realtimeChannel = null;
-let activeUsers = {};
+/* ─── STATE ─── */
+let CU=null, CRid=null, pollT=null, presT=null;
 
-// ══════════════════════════════════════════
-// AUTH
-// ══════════════════════════════════════════
-function doLogin() {
-  const name = document.getElementById('login-name').value.trim();
-  const role = document.getElementById('login-role').value;
-  if (!name) { showToast('Enter your name', true); return; }
-  currentUser = { name, role };
-  document.getElementById('login-page').style.display = 'none';
-  document.getElementById('app').style.display = 'block';
-  document.getElementById('topbar-user').textContent = `${name} · ${role}`;
+const esc=s=>!s?'':String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const localNow=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);};
+
+async function api(method,table,qs='',body=null){
+  const r=await fetch(`${SB}/rest/v1/${table}${qs?'?'+qs:''}`,{method,headers:H,body:body?JSON.stringify(body):null});
+  return r.json().catch(()=>({}));
+}
+
+/* ─── AUTH ─── */
+function doLogin(){
+  const name=document.getElementById('login-name').value.trim();
+  const role=document.getElementById('login-role').value;
+  if(!name){toast('Please enter your name',false);return;}
+  CU={name,role};
+  document.getElementById('login-page').style.display='none';
+  document.getElementById('app').style.display='block';
+  document.getElementById('topnav').classList.add('visible');
+  document.getElementById('user-badge').textContent=`${name} · ${role}`;
   loadRuns();
 }
 
-function doLogout() {
-  if (realtimeChannel) disconnectRealtime();
-  currentUser = null;
-  currentRunId = null;
-  document.getElementById('app').style.display = 'none';
-  document.getElementById('login-page').style.display = 'flex';
-  document.getElementById('login-name').value = '';
+function doLogout(){
+  clearInterval(pollT);clearInterval(presT);
+  CU=null;CRid=null;
+  document.getElementById('app').style.display='none';
+  document.getElementById('topnav').classList.remove('visible');
+  document.getElementById('login-page').style.display='flex';
+  document.getElementById('login-name').value='';
 }
 
-// ══════════════════════════════════════════
-// API HELPERS
-// ══════════════════════════════════════════
-async function apiGet(table, params = '') {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, { headers: HEADERS });
-  return r.json();
-}
-
-async function apiPost(table, body) {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}`, {
-    method: 'POST', headers: HEADERS, body: JSON.stringify(body)
-  });
-  return r.json();
-}
-
-async function apiPatch(table, params, body) {
-  const r = await fetch(`${SUPABASE_URL}/rest/v1/${table}?${params}`, {
-    method: 'PATCH', headers: HEADERS, body: JSON.stringify(body)
-  });
-  return r.json();
-}
-
-// ══════════════════════════════════════════
-// RUNS
-// ══════════════════════════════════════════
-async function loadRuns() {
-  const grid = document.getElementById('runs-grid');
-  grid.innerHTML = '<div class="empty-state">LOADING...</div>';
-  try {
-    const runs = await apiGet('runs', 'order=created_at.desc');
-    if (!runs.length) {
-      grid.innerHTML = '<div class="empty-state">NO RUNS YET · CREATE THE FIRST ONE</div>';
+/* ─── DASHBOARD ─── */
+async function loadRuns(){
+  document.getElementById('tn-section').textContent='Dashboard';
+  const g=document.getElementById('runs-grid');
+  g.innerHTML='<div class="empty-box">Loading runs…</div>';
+  try{
+    const runs=await api('GET','runs','order=created_at.desc');
+    if(!Array.isArray(runs)||!runs.length){
+      g.innerHTML='<div class="empty-box">No runs yet — create the first one above</div>';
       return;
     }
-    grid.innerHTML = '';
-    for (const run of runs) {
-      const entries = await apiGet('runsheet_entries', `run_id=eq.${run.id}&select=status`);
-      const total = STEPS.length;
-      const done = entries.filter(e => ['PASS','FAIL','REWORK'].includes(e.status)).length;
-      const pct = Math.round((done / total) * 100);
-      grid.innerHTML += `
-        <div class="run-card" onclick="openRun('${run.id}','${escHtml(run.name)}')">
-          <div class="run-id">RUN #${run.id.slice(0,8).toUpperCase()}</div>
-          <div class="run-name">${escHtml(run.name)}</div>
-          <div class="run-meta">
-            <span>${run.process_type}</span>
-            <span>${done}/${total} STEPS</span>
-            <span>${new Date(run.created_at).toLocaleDateString()}</span>
+    g.innerHTML='';
+    for(const r of runs){
+      const entries=await api('GET','runsheet_entries',`run_id=eq.${r.id}&select=status`);
+      const done=Array.isArray(entries)?entries.filter(e=>['PASS','FAIL','REWORK'].includes(e.status)).length:0;
+      const pct=Math.round(done/STEPS.length*100);
+      const date=new Date(r.created_at).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+      g.innerHTML+=`
+        <div class="run-card" onclick="openRun('${r.id}','${esc(r.name)}','${esc(r.process_type)}')">
+          <div class="run-card-top-bar"></div>
+          <div class="run-card-body">
+            <div class="rc-number">Run · ${r.id.slice(0,8).toUpperCase()}</div>
+            <div class="rc-name">${esc(r.name)}</div>
+            <div class="rc-tags">
+              <span class="rc-tag">${esc(r.process_type)}</span>
+              <span class="rc-tag">${done}/${STEPS.length} Steps</span>
+            </div>
           </div>
-          <div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+          <div class="rc-progress-row">
+            <div class="rc-progress-bar-wrap">
+              <div class="rc-progress-label">${pct}% complete · ${date}</div>
+              <div class="rc-progress-track"><div class="rc-progress-fill" style="width:${pct}%"></div></div>
+            </div>
+            <div class="rc-arrow">›</div>
+          </div>
         </div>`;
     }
-  } catch(e) {
-    grid.innerHTML = '<div class="empty-state">ERROR LOADING — CHECK CONNECTION</div>';
-  }
+  }catch(e){g.innerHTML='<div class="empty-box">Error loading — check your connection</div>';}
 }
 
-function openNewRunModal() {
-  document.getElementById('modal-overlay').classList.add('open');
+function openModal(){document.getElementById('modal-bd').classList.add('open');}
+function closeModal(){document.getElementById('modal-bd').classList.remove('open');}
+
+async function createRun(){
+  const name=document.getElementById('new-name').value.trim();
+  const type=document.getElementById('new-type').value;
+  if(!name){toast('Enter a run name');return;}
+  const res=await api('POST','runs','',{name,process_type:type,created_by:CU.name});
+  closeModal();
+  if(Array.isArray(res)&&res[0]) openRun(res[0].id,res[0].name,res[0].process_type);
+  else toast('Error creating run — try again');
 }
 
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
+/* ─── RUNSHEET ─── */
+async function openRun(runId,runName,runType){
+  CRid=runId;
+  document.getElementById('dashboard-page').style.display='none';
+  document.getElementById('runsheet-page').style.display='block';
+  document.getElementById('tn-section').textContent=runName;
+  document.getElementById('rs-bc-name').textContent=runName;
+  document.getElementById('rs-code').textContent=`Run · ${runId.slice(0,8).toUpperCase()} · ${runType||''}`;
+  document.getElementById('rs-title').textContent=runName;
+  document.getElementById('rs-meta').innerHTML=
+    `<span>Opened: ${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</span>
+     <span>Operator: ${CU.name}</span><span>Role: ${CU.role}</span>`;
+  let entries=[];
+  try{entries=await api('GET','runsheet_entries',`run_id=eq.${runId}`);}catch(e){}
+  if(!Array.isArray(entries)) entries=[];
+  const c=document.getElementById('steps-container');
+  c.innerHTML=STEPS.map(s=>buildStep(s,entries.find(e=>e.step_number===s.n)||{},runId)).join('');
+  startSync(runId);
 }
 
-async function createRun() {
-  const name = document.getElementById('new-run-name').value.trim();
-  const type = document.getElementById('new-run-type').value;
-  if (!name) { showToast('Enter a run name', true); return; }
-  try {
-    const res = await apiPost('runs', { name, process_type: type, created_by: currentUser.name });
-    closeModal();
-    if (res[0]) openRun(res[0].id, res[0].name);
-    else showToast('Error creating run', true);
-  } catch(e) { showToast('Error creating run', true); }
-}
-
-// ══════════════════════════════════════════
-// OPEN RUN / RUNSHEET VIEW
-// ══════════════════════════════════════════
-async function openRun(runId, runName) {
-  currentRunId = runId;
-  currentRunName = runName;
-  document.getElementById('dashboard-page').style.display = 'none';
-  document.getElementById('runsheet-page').style.display = 'block';
-  document.getElementById('rs-run-id').textContent = `RUN #${runId.slice(0,8).toUpperCase()}`;
-  document.getElementById('rs-title').textContent = runName;
-
-  // Load all saved entries for this run
-  let entries = [];
-  try { entries = await apiGet('runsheet_entries', `run_id=eq.${runId}`); } catch(e) {}
-
-  // Build steps
-  const container = document.getElementById('steps-container');
-  container.innerHTML = '';
-  for (const step of STEPS) {
-    const saved = entries.find(e => e.step_number === step.num) || {};
-    container.innerHTML += buildStepCard(step, saved, runId);
-  }
-
-  // Start realtime
-  connectRealtime(runId);
-}
-
-function showDashboard() {
-  disconnectRealtime();
-  document.getElementById('runsheet-page').style.display = 'none';
-  document.getElementById('dashboard-page').style.display = 'block';
+function showDash(){
+  clearInterval(pollT);clearInterval(presT);
+  document.getElementById('runsheet-page').style.display='none';
+  document.getElementById('dashboard-page').style.display='block';
+  document.getElementById('tn-section').textContent='Dashboard';
   loadRuns();
 }
 
-// ══════════════════════════════════════════
-// BUILD STEP CARD HTML
-// ══════════════════════════════════════════
-function buildStepCard(step, saved, runId) {
-  const status = saved.status || 'PENDING';
-  const badgeClass = {
-    'PENDING':'badge-pending','IN_PROGRESS':'badge-in-progress',
-    'PASS':'badge-pass','FAIL':'badge-fail','REWORK':'badge-rework'
-  }[status] || 'badge-pending';
-  const cardClass = {
-    'IN_PROGRESS':'active','PASS':'completed','FAIL':'failed','REWORK':'rework'
-  }[status] || '';
-
-  const updatedAt = saved.updated_at
-    ? `LAST UPDATED: ${new Date(saved.updated_at).toLocaleString()} BY ${saved.operator_name || '—'}`
-    : 'NOT YET STARTED';
-
-  const hasAll = f => step.fields.includes(f);
-
+function buildStep(step,saved,runId){
+  const st=saved.status||'PENDING';
+  const bc='sb-'+st.toLowerCase().replace(/ /g,'_');
+  const cc={'IN_PROGRESS':'s-progress','PASS':'s-pass','FAIL':'s-fail','REWORK':'s-rework'}[st]||'';
+  const has=f=>step.f.includes(f);
+  const lu=saved.updated_at
+    ?`Saved ${new Date(saved.updated_at).toLocaleString('en-IN')} by ${saved.operator_name||'—'}`
+    :'Not yet started';
   return `
-  <div class="step-card ${cardClass}" id="step-card-${step.num}">
-    <div class="step-header" onclick="toggleStep('${step.num}')">
-      <span class="step-num">STEP ${step.num}</span>
-      <span class="step-title-text">${step.name}</span>
-      <span class="step-status-badge ${badgeClass}">${status.replace('_',' ')}</span>
+  <div class="step-card ${cc}" id="sc-${step.n}">
+    <div class="step-header" onclick="toggleStep('${step.n}')">
+      <div class="step-num-badge">Step ${step.n}</div>
+      <div class="step-title-text">${step.name}</div>
+      <div class="step-badge ${bc}">${st.replace('_',' ')}</div>
+      <div class="step-chevron">›</div>
     </div>
-    <div class="step-body" id="step-body-${step.num}">
-      <div class="step-fixed">
-        <div class="step-fixed-title">FIXED PARAMETERS (READ ONLY)</div>
-        <div class="fixed-row"><span class="fixed-key">TOOL:</span><span class="fixed-val">${step.tool}</span></div>
-        <div class="fixed-row"><span class="fixed-key">RECIPE:</span><span class="fixed-val">${step.recipe}</span></div>
-        <div class="fixed-row" style="margin-top:4px"><span class="fixed-key">PARAMS:</span><span class="fixed-val">${step.params}</span></div>
+    <div class="step-body" id="sbd-${step.n}">
+      <div class="ref-params">
+        <div class="rp-heading">Reference Parameters (Fixed)</div>
+        <div class="rp-row"><span class="rp-key">Tool:</span><span class="rp-val">${step.tool}</span></div>
+        <div class="rp-row"><span class="rp-key">Recipe:</span><span class="rp-val">${step.recipe}</span></div>
+        <div class="rp-row"><span class="rp-key">Notes:</span><span class="rp-val">${step.params}</span></div>
       </div>
+      <div class="live-form-header">Live Entry — Fill in actual values</div>
       <div class="form-grid">
-        ${hasAll('operator_name') ? `
-        <div class="form-field">
-          <label class="form-label">OPERATOR NAME</label>
-          <input class="form-input" id="f-${step.num}-operator_name" value="${escHtml(saved.operator_name||currentUser.name)}" placeholder="Operator">
-        </div>` : ''}
-        ${hasAll('date_time') ? `
-        <div class="form-field">
-          <label class="form-label">DATE & TIME</label>
-          <input class="form-input" type="datetime-local" id="f-${step.num}-date_time" value="${saved.date_time ? saved.date_time.slice(0,16) : nowLocal()}">
-        </div>` : ''}
-        ${hasAll('tool_used') ? `
-        <div class="form-field">
-          <label class="form-label">TOOL USED</label>
-          <input class="form-input" id="f-${step.num}-tool_used" value="${escHtml(saved.tool_used||step.tool)}" placeholder="Tool name">
-        </div>` : ''}
-        ${hasAll('recipe') ? `
-        <div class="form-field">
-          <label class="form-label">RECIPE USED</label>
-          <input class="form-input" id="f-${step.num}-recipe" value="${escHtml(saved.recipe||step.recipe)}" placeholder="Recipe">
-        </div>` : ''}
-        ${hasAll('parameters') ? `
-        <div class="form-field full">
-          <label class="form-label">PARAMETERS / CONDITIONS</label>
-          <input class="form-input" id="f-${step.num}-parameters" value="${escHtml(saved.parameters||'')}" placeholder="Actual parameters used">
-        </div>` : ''}
-        ${hasAll('measurements') ? `
-        <div class="form-field full">
-          <label class="form-label">MEASUREMENTS / RESULTS</label>
-          <textarea class="form-textarea" id="f-${step.num}-measurements" placeholder="Thickness, resistance, observations...">${escHtml(saved.measurements||'')}</textarea>
-        </div>` : ''}
-        ${hasAll('comments') ? `
-        <div class="form-field full">
-          <label class="form-label">COMMENTS / NOTES</label>
-          <textarea class="form-textarea" id="f-${step.num}-comments" placeholder="Issues, deviations, notes...">${escHtml(saved.comments||'')}</textarea>
-        </div>` : ''}
-        ${hasAll('status') ? `
-        <div class="form-field">
-          <label class="form-label">STATUS</label>
-          <select class="form-sel" id="f-${step.num}-status">
-            <option value="PENDING" ${status==='PENDING'?'selected':''}>PENDING</option>
-            <option value="IN_PROGRESS" ${status==='IN_PROGRESS'?'selected':''}>IN PROGRESS</option>
-            <option value="PASS" ${status==='PASS'?'selected':''}>PASS</option>
-            <option value="REWORK" ${status==='REWORK'?'selected':''}>REWORK</option>
-            <option value="FAIL" ${status==='FAIL'?'selected':''}>FAIL</option>
-          </select>
-        </div>` : ''}
+        ${has('op')?`<div class="fg"><label>Operator Name</label><input id="f-${step.n}-op" value="${esc(saved.operator_name||CU.name)}"></div>`:''}
+        ${has('dt')?`<div class="fg"><label>Date &amp; Time</label><input type="datetime-local" id="f-${step.n}-dt" value="${saved.date_time?saved.date_time.slice(0,16):localNow()}"></div>`:''}
+        ${has('tool')?`<div class="fg"><label>Tool Used</label><input id="f-${step.n}-tool" value="${esc(saved.tool_used||step.tool)}"></div>`:''}
+        ${has('rec')?`<div class="fg"><label>Recipe Used</label><input id="f-${step.n}-rec" value="${esc(saved.recipe||step.recipe)}"></div>`:''}
+        ${has('par')?`<div class="fg span2"><label>Actual Parameters / Conditions</label><input id="f-${step.n}-par" value="${esc(saved.parameters||'')}" placeholder="Record exact conditions used"></div>`:''}
+        ${has('meas')?`<div class="fg span2"><label>Measurements &amp; Results</label><textarea id="f-${step.n}-meas" placeholder="Thickness, resistance, SEM observations…">${esc(saved.measurements||'')}</textarea></div>`:''}
+        ${has('com')?`<div class="fg span2"><label>Comments &amp; Deviations</label><textarea id="f-${step.n}-com" placeholder="Issues, deviations, remarks, rework notes…">${esc(saved.comments||'')}</textarea></div>`:''}
+        ${has('st')?`<div class="fg"><label>Step Status</label><select id="f-${step.n}-st">
+          <option value="PENDING" ${st==='PENDING'?'selected':''}>Pending</option>
+          <option value="IN_PROGRESS" ${st==='IN_PROGRESS'?'selected':''}>In Progress</option>
+          <option value="PASS" ${st==='PASS'?'selected':''}>Pass</option>
+          <option value="REWORK" ${st==='REWORK'?'selected':''}>Rework</option>
+          <option value="FAIL" ${st==='FAIL'?'selected':''}>Fail</option>
+        </select></div>`:''}
       </div>
-      <div class="step-footer">
-        <span class="last-updated" id="lu-${step.num}">${updatedAt}</span>
-        <button class="btn-save" onclick="saveStep('${step.num}','${runId}')">SAVE STEP</button>
+      <div class="step-foot">
+        <span class="step-timestamp" id="si-${step.n}">${lu}</span>
+        <button class="btn-save" onclick="saveStep('${step.n}','${runId}')">Save Step</button>
       </div>
     </div>
   </div>`;
 }
 
-function toggleStep(num) {
-  const body = document.getElementById(`step-body-${num}`);
-  body.classList.toggle('open');
+function toggleStep(n){
+  const bd=document.getElementById(`sbd-${n}`);
+  bd.classList.toggle('open');
+  const chev=document.querySelector(`#sc-${n} .step-chevron`);
+  if(chev) chev.style.transform=bd.classList.contains('open')?'rotate(90deg)':'';
 }
 
-// ══════════════════════════════════════════
-// SAVE STEP
-// ══════════════════════════════════════════
-async function saveStep(stepNum, runId) {
-  const step = STEPS.find(s => s.num === stepNum);
-  const btn = document.querySelector(`#step-card-${stepNum} .btn-save`);
-  btn.disabled = true;
-  btn.textContent = 'SAVING...';
-
-  const val = id => {
-    const el = document.getElementById(`f-${stepNum}-${id}`);
-    return el ? el.value : null;
+async function saveStep(sn,runId){
+  const step=STEPS.find(s=>s.n===sn);
+  const btn=document.querySelector(`#sc-${sn} .btn-save`);
+  btn.disabled=true; btn.textContent='Saving…';
+  const v=id=>{const el=document.getElementById(`f-${sn}-${id}`);return el?el.value:null;};
+  const payload={
+    run_id:runId,step_number:sn,step_name:step.name,
+    operator_name:v('op')||CU.name, role:CU.role,
+    date_time:v('dt')||new Date().toISOString(),
+    tool_used:v('tool'), recipe:v('rec'), parameters:v('par'),
+    measurements:v('meas'), comments:v('com'),
+    status:v('st')||'PENDING', updated_at:new Date().toISOString()
   };
-
-  const payload = {
-    run_id: runId,
-    step_number: stepNum,
-    step_name: step.name,
-    operator_name: val('operator_name') || currentUser.name,
-    role: currentUser.role,
-    date_time: val('date_time') || new Date().toISOString(),
-    tool_used: val('tool_used'),
-    recipe: val('recipe'),
-    parameters: val('parameters'),
-    measurements: val('measurements'),
-    comments: val('comments'),
-    status: val('status') || 'PENDING',
-    updated_at: new Date().toISOString()
-  };
-
-  // Remove nulls
-  Object.keys(payload).forEach(k => payload[k] === null && delete payload[k]);
-
-  try {
-    // Upsert via insert with on-conflict update
-    const existing = await apiGet('runsheet_entries', `run_id=eq.${runId}&step_number=eq.${stepNum}`);
-    if (existing.length > 0) {
-      await apiPatch('runsheet_entries', `run_id=eq.${runId}&step_number=eq.${stepNum}`, payload);
-    } else {
-      await apiPost('runsheet_entries', payload);
-    }
-    updateStepCardUI(stepNum, payload);
-    showToast(`Step ${stepNum} saved ✓`);
-  } catch(e) {
-    showToast('Save failed — check connection', true);
-  }
-
-  btn.disabled = false;
-  btn.textContent = 'SAVE STEP';
+  Object.keys(payload).forEach(k=>payload[k]===null&&delete payload[k]);
+  try{
+    const ex=await api('GET','runsheet_entries',`run_id=eq.${runId}&step_number=eq.${sn}`);
+    if(Array.isArray(ex)&&ex.length) await api('PATCH','runsheet_entries',`run_id=eq.${runId}&step_number=eq.${sn}`,payload);
+    else await api('POST','runsheet_entries','',payload);
+    refreshStepUI(sn,payload);
+    toast('Step saved successfully',true);
+  }catch(e){toast('Save failed — check connection');}
+  btn.disabled=false; btn.textContent='Save Step';
 }
 
-function updateStepCardUI(stepNum, data) {
-  const card = document.getElementById(`step-card-${stepNum}`);
-  const badge = card.querySelector('.step-status-badge');
-  const status = data.status || 'PENDING';
-  card.className = 'step-card ' + ({'IN_PROGRESS':'active','PASS':'completed','FAIL':'failed','REWORK':'rework'}[status]||'');
-  badge.className = 'step-status-badge ' + ({'PENDING':'badge-pending','IN_PROGRESS':'badge-in-progress','PASS':'badge-pass','FAIL':'badge-fail','REWORK':'badge-rework'}[status]||'badge-pending');
-  badge.textContent = status.replace('_',' ');
-  const lu = document.getElementById(`lu-${stepNum}`);
-  if (lu) lu.textContent = `LAST UPDATED: ${new Date().toLocaleString()} BY ${data.operator_name}`;
+function refreshStepUI(n,data){
+  const card=document.getElementById(`sc-${n}`);
+  const badge=card.querySelector('.step-badge');
+  const s=data.status||'PENDING';
+  card.className='step-card '+({'IN_PROGRESS':'s-progress','PASS':'s-pass','FAIL':'s-fail','REWORK':'s-rework'}[s]||'');
+  badge.className='step-badge sb-'+s.toLowerCase().replace(/ /g,'_');
+  badge.textContent=s.replace('_',' ');
+  const si=document.getElementById(`si-${n}`);
+  if(si) si.textContent=`Saved ${new Date().toLocaleString('en-IN')} by ${data.operator_name}`;
 }
 
-// ══════════════════════════════════════════
-// REAL-TIME SYNC (Supabase Realtime via polling fallback)
-// ══════════════════════════════════════════
-let pollInterval = null;
-
-function connectRealtime(runId) {
-  // Poll every 5 seconds for updates
-  pollInterval = setInterval(async () => {
-    try {
-      const entries = await apiGet('runsheet_entries', `run_id=eq.${runId}`);
-      for (const entry of entries) {
-        updateStepCardUI(entry.step_number, entry);
-        // Update form fields if another user changed them
-        const fields = ['operator_name','tool_used','recipe','parameters','measurements','comments','status'];
-        fields.forEach(f => {
-          const el = document.getElementById(`f-${entry.step_number}-${f}`);
-          if (el && document.activeElement !== el && entry[f]) {
-            if (el.tagName === 'SELECT' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-              el.value = entry[f];
-            }
-          }
+/* ─── SYNC ─── */
+function startSync(runId){
+  pollT=setInterval(async()=>{
+    try{
+      const entries=await api('GET','runsheet_entries',`run_id=eq.${runId}`);
+      if(!Array.isArray(entries)) return;
+      entries.forEach(e=>{
+        refreshStepUI(e.step_number,e);
+        ['op','dt','tool','rec','par','meas','com','st'].forEach(f=>{
+          const fieldMap={op:'operator_name',dt:'date_time',tool:'tool_used',rec:'recipe',par:'parameters',meas:'measurements',com:'comments',st:'status'};
+          const el=document.getElementById(`f-${e.step_number}-${f}`);
+          const val=e[fieldMap[f]];
+          if(el&&document.activeElement!==el&&val!=null) el.value=val;
         });
-      }
-    } catch(e) {}
-  }, 5000);
-
-  // Track presence via simple heartbeat
-  updatePresence(runId);
-  const presenceInterval = setInterval(() => updatePresence(runId), 15000);
-  realtimeChannel = { poll: pollInterval, presence: presenceInterval };
+      });
+    }catch(e){}
+  },5000);
+  pingPresence(runId);
+  presT=setInterval(()=>pingPresence(runId),15000);
 }
 
-function disconnectRealtime() {
-  if (realtimeChannel) {
-    clearInterval(realtimeChannel.poll);
-    clearInterval(realtimeChannel.presence);
-    realtimeChannel = null;
-  }
+async function pingPresence(runId){
+  try{
+    const p={run_id:runId,operator_name:CU.name,role:CU.role,last_seen:new Date().toISOString()};
+    const ex=await api('GET','presence',`run_id=eq.${runId}&operator_name=eq.${encodeURIComponent(CU.name)}`);
+    if(Array.isArray(ex)&&ex.length) await api('PATCH','presence',`run_id=eq.${runId}&operator_name=eq.${encodeURIComponent(CU.name)}`,p);
+    else await api('POST','presence','',p);
+    const all=await api('GET','presence',`run_id=eq.${runId}`);
+    if(!Array.isArray(all)) return;
+    const active=all.filter(p=>Date.now()-new Date(p.last_seen).getTime()<30000);
+    const chips=document.getElementById('presence-chips');
+    if(chips) chips.innerHTML=active.map(p=>`<span class="presence-chip">${p.operator_name} · ${p.role}</span>`).join('')||'—';
+  }catch(e){}
 }
 
-async function updatePresence(runId) {
-  // Store presence in a simple table
-  try {
-    const existing = await apiGet('presence', `run_id=eq.${runId}&operator_name=eq.${encodeURIComponent(currentUser.name)}`);
-    const pData = { run_id: runId, operator_name: currentUser.name, role: currentUser.role, last_seen: new Date().toISOString() };
-    if (existing.length > 0) {
-      await apiPatch('presence', `run_id=eq.${runId}&operator_name=eq.${encodeURIComponent(currentUser.name)}`, pData);
-    } else {
-      await apiPost('presence', pData);
-    }
-    // Fetch all active (seen in last 30s)
-    const allPresent = await apiGet('presence', `run_id=eq.${runId}`);
-    const cutoff = Date.now() - 30000;
-    const active = allPresent.filter(p => new Date(p.last_seen).getTime() > cutoff);
-    const chips = document.getElementById('collab-chips');
-    if (chips) {
-      chips.innerHTML = active.map(p =>
-        `<span class="collab-chip">${p.operator_name} · ${p.role}</span>`
-      ).join('') || '—';
-    }
-  } catch(e) {} // presence table may not exist yet — safe to ignore
+/* ─── TOAST ─── */
+let tT;
+function toast(msg,ok=false){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast'+(ok?' ok':' err');
+  t.style.display='block';
+  clearTimeout(tT);
+  tT=setTimeout(()=>t.style.display='none',3000);
 }
 
-// ══════════════════════════════════════════
-// UTILS
-// ══════════════════════════════════════════
-function escHtml(s) {
-  if (!s) return '';
-  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function nowLocal() {
-  const d = new Date();
-  d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
-  return d.toISOString().slice(0,16);
-}
-
-let toastTimer;
-function showToast(msg, isError = false) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast' + (isError ? ' error' : '');
-  t.style.display = 'block';
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.style.display = 'none', 3000);
-}
-
-// Enter key on login
-document.getElementById('login-name').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
+document.getElementById('login-name').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
 </script>
 </body>
 </html>
