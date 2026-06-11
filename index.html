@@ -3,1124 +3,309 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LaserSheet — DRDO SSPL</title>
+<title>LaserSheet</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,600;0,700;1,400&family=Noto+Sans:wght@400;500;600;700;800&family=Source+Code+Pro:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --navy:    #1a237e;
-  --navy2:   #283593;
-  --navy3:   #3949ab;
-  --navy-lt: #e8eaf6;
-  --navy-bg: #f3f4fc;
-  --saffron: #e65100;
-  --saff2:   #f4511e;
-  --saff-lt: #fbe9e7;
-  --green:   #1b5e20;
-  --green2:  #2e7d32;
-  --green-lt:#e8f5e9;
-  --gold:    #f9a825;
-  --white:   #ffffff;
-  --off:     #fafafa;
-  --gray1:   #f5f5f5;
-  --gray2:   #eeeeee;
-  --gray3:   #e0e0e0;
-  --text:    #212121;
-  --text2:   #424242;
-  --text3:   #757575;
-  --border:  #d0d0d0;
-  --serif:   'Noto Serif', Georgia, serif;
-  --sans:    'Noto Sans', Arial, sans-serif;
-  --mono:    'Source Code Pro', monospace;
-  --shadow:  0 2px 8px rgba(0,0,0,0.10);
-  --shadow2: 0 4px 16px rgba(0,0,0,0.13);
+  --navy:#1a237e;--navy2:#283593;--navy3:#3949ab;--navy-lt:#e8eaf6;--navy-bg:#f3f4fc;
+  --saffron:#e65100;--saff2:#f4511e;--saff-lt:#fbe9e7;
+  --green:#1b5e20;--green2:#2e7d32;--green-lt:#e8f5e9;
+  --teal:#00695c;--teal2:#00897b;--teal-lt:#e0f2f1;--teal-bd:#b2dfdb;
+  --amber:#f57f17;--amber-lt:#fff8e1;--amber-bd:#ffe082;
+  --red:#c62828;--red-lt:#ffebee;
+  --gold:#f9a825;
+  --white:#ffffff;--off:#fafafa;--gray1:#f5f5f5;--gray2:#eeeeee;--gray3:#e0e0e0;
+  --text:#212121;--text2:#424242;--text3:#757575;--border:#d0d0d0;
+  --serif:'Noto Serif',Georgia,serif;--sans:'Noto Sans',Arial,sans-serif;--mono:'Source Code Pro',monospace;
+  --shadow:0 2px 8px rgba(0,0,0,0.10);--shadow2:0 4px 16px rgba(0,0,0,0.13);
 }
-
-*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-
-body {
-  font-family: var(--sans);
-  background: var(--gray1);
-  color: var(--text);
-  min-height: 100vh;
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-/* ── GOV TOP STRIP ── */
-.gov-strip {
-  background: var(--navy);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 32px;
-  height: 48px;
-  gap: 16px;
-}
-
-.gov-strip-left {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.gov-emblem-circle {
-  width: 34px; height: 34px;
-  background: white;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-.gov-strip-text {
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  line-height: 1.4;
-  color: rgba(255,255,255,0.9);
-}
-
-.gov-strip-text strong {
-  font-weight: 700;
-  font-size: 12px;
-  color: white;
-  display: block;
-}
-
-.tricolor-bar {
-  display: flex;
-  gap: 0;
-  border-radius: 2px;
-  overflow: hidden;
-  height: 18px;
-}
-.tricolor-bar span {
-  width: 10px;
-  display: block;
-}
-.tc1 { background: #FF9933; }
-.tc2 { background: #ffffff; }
-.tc3 { background: #138808; }
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:var(--sans);background:var(--gray1);color:var(--text);min-height:100vh;font-size:14px;line-height:1.6;}
 
 /* ── SITE HEADER ── */
-.site-header {
-  background: white;
-  border-bottom: 3px solid var(--saffron);
-  box-shadow: var(--shadow);
-}
+.site-header{background:white;border-bottom:3px solid var(--saffron);box-shadow:var(--shadow);}
+.site-header-inner{max-width:1200px;margin:0 auto;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.header-brand{display:flex;align-items:center;gap:18px;}
+.header-logo-block{width:56px;height:56px;background:var(--navy);border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;box-shadow:var(--shadow);}
+.header-app-name{font-family:var(--serif);font-size:26px;font-weight:700;color:var(--navy);letter-spacing:0.5px;line-height:1;}
+.header-app-name span{color:var(--saffron);}
+.header-right{text-align:right;}
+.header-tagline{font-family:var(--serif);font-size:13px;font-style:italic;color:var(--text3);}
 
-.site-header-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 16px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-}
+/* ── TOPNAV ── */
+.topnav{display:none;background:var(--navy2);padding:0 32px;height:48px;align-items:center;justify-content:space-between;}
+.topnav.visible{display:flex;}
+.tn-crumb{font-family:var(--sans);font-size:12px;color:rgba(255,255,255,0.7);display:flex;align-items:center;gap:8px;}
+.tn-crumb strong{color:white;font-weight:600;}
+.tn-right{display:flex;align-items:center;gap:12px;}
+.live-indicator{display:flex;align-items:center;gap:6px;background:var(--green-lt);border:1px solid var(--green2);color:var(--green2);font-family:var(--sans);font-size:11px;font-weight:700;letter-spacing:1px;padding:3px 10px;text-transform:uppercase;}
+.live-dot{width:6px;height:6px;background:var(--green2);border-radius:50%;animation:blink 2s infinite;}
+.user-badge{background:white;color:var(--navy);font-family:var(--sans);font-size:12px;font-weight:700;padding:4px 14px;letter-spacing:0.3px;}
+.btn-exit{background:transparent;border:1px solid rgba(255,255,255,0.4);color:rgba(255,255,255,0.8);font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:1px;padding:4px 12px;cursor:pointer;text-transform:uppercase;transition:all 0.2s;}
+.btn-exit:hover{background:rgba(255,255,255,0.1);color:white;}
 
-.header-brand {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
+/* ── MAIN ── */
+.main-wrap{max-width:1100px;margin:0 auto;padding:32px;}
 
-.header-logo-block {
-  width: 56px; height: 56px;
-  background: var(--navy);
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 28px;
-  flex-shrink: 0;
-  box-shadow: var(--shadow);
-}
+/* ── LOGIN ── */
+#login-page{min-height:calc(100vh - 89px);display:flex;align-items:center;justify-content:center;padding:48px 32px;}
+.login-outer{width:100%;max-width:500px;}
+.login-card{background:white;border:1px solid var(--border);box-shadow:var(--shadow2);}
+.login-card-header{background:var(--navy);padding:24px 28px;display:flex;align-items:center;gap:14px;}
+.login-card-icon{width:44px;height:44px;background:rgba(255,255,255,0.15);border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.login-card-title{font-family:var(--serif);font-size:20px;font-weight:700;color:white;line-height:1.2;}
+.login-card-sub{font-family:var(--sans);font-size:11px;color:rgba(255,255,255,0.7);margin-top:3px;letter-spacing:0.5px;}
+.login-card-body{padding:28px;}
+.form-group{margin-bottom:20px;}
+.form-label{display:block;font-family:var(--sans);font-size:12px;font-weight:700;color:var(--text2);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:6px;}
+.form-control{width:100%;background:white;border:1.5px solid var(--border);color:var(--text);font-family:var(--sans);font-size:15px;font-weight:500;padding:11px 14px;outline:none;transition:border-color 0.2s;border-radius:2px;-webkit-appearance:none;}
+.form-control:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(26,35,126,0.08);}
+.form-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%231a237e' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;background-color:white;padding-right:40px;}
+.form-select option{font-size:14px;}
+.btn-login{width:100%;background:var(--saffron);border:none;color:white;font-family:var(--sans);font-size:16px;font-weight:800;letter-spacing:1px;padding:14px;cursor:pointer;transition:background 0.2s;text-transform:uppercase;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;border-radius:2px;}
+.btn-login:hover{background:var(--saff2);}
+.login-footer{background:var(--gray1);border-top:1px solid var(--gray3);padding:12px 28px;font-family:var(--sans);font-size:11px;color:var(--text3);text-align:center;}
 
-.header-title-block {}
+/* ── APP ── */
+#app{display:none;}
+#dashboard-page{display:block;}
 
-.header-app-name {
-  font-family: var(--serif);
-  font-size: 26px;
-  font-weight: 700;
-  color: var(--navy);
-  letter-spacing: 0.5px;
-  line-height: 1;
-}
-
-.header-app-name span { color: var(--saffron); }
-
-.header-org-name {
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text3);
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  margin-top: 4px;
-}
-
-.header-right {
-  text-align: right;
-}
-
-.header-tagline {
-  font-family: var(--serif);
-  font-size: 13px;
-  font-style: italic;
-  color: var(--text3);
-}
-
-.header-classification {
-  display: inline-block;
-  background: var(--navy);
-  color: white;
-  font-family: var(--sans);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 2px 10px;
-  margin-top: 4px;
-}
-
-/* ── TOPNAV (logged in) ── */
-.topnav {
-  display: none;
-  background: var(--navy2);
-  padding: 0 32px;
-  height: 48px;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.topnav.visible { display: flex; }
-
-.tn-crumb {
-  font-family: var(--sans);
-  font-size: 12px;
-  color: rgba(255,255,255,0.7);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.tn-crumb strong { color: white; font-weight: 600; }
-
-.tn-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.live-indicator {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--green-lt);
-  border: 1px solid var(--green2);
-  color: var(--green2);
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 3px 10px;
-  text-transform: uppercase;
-}
-
-.live-dot {
-  width: 6px; height: 6px;
-  background: var(--green2);
-  border-radius: 50%;
-  animation: blink 2s infinite;
-}
-
-.user-badge {
-  background: white;
-  color: var(--navy);
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 700;
-  padding: 4px 14px;
-  letter-spacing: 0.3px;
-}
-
-.btn-exit {
-  background: transparent;
-  border: 1px solid rgba(255,255,255,0.4);
-  color: rgba(255,255,255,0.8);
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 1px;
-  padding: 4px 12px;
-  cursor: pointer;
-  text-transform: uppercase;
-  transition: all 0.2s;
-}
-.btn-exit:hover { background: rgba(255,255,255,0.1); color: white; }
-
-/* ── MAIN CONTAINER ── */
-.main-wrap {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 32px;
-}
-
-/* ── LOGIN PAGE ── */
-#login-page {
-  min-height: calc(100vh - 120px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 48px 32px;
-}
-
-.login-outer {
-  width: 100%;
-  max-width: 500px;
-}
-
-.login-notice {
-  background: var(--navy-lt);
-  border-left: 4px solid var(--navy);
-  padding: 12px 16px;
-  margin-bottom: 24px;
-  font-family: var(--sans);
-  font-size: 12px;
-  color: var(--navy);
-  font-weight: 500;
-}
-
-.login-card {
-  background: white;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow2);
-}
-
-.login-card-header {
-  background: var(--navy);
-  padding: 24px 28px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-}
-
-.login-card-icon {
-  width: 44px; height: 44px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 2px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  flex-shrink: 0;
-}
-
-.login-card-title {
-  font-family: var(--serif);
-  font-size: 20px;
-  font-weight: 700;
-  color: white;
-  line-height: 1.2;
-}
-
-.login-card-sub {
-  font-family: var(--sans);
-  font-size: 11px;
-  color: rgba(255,255,255,0.7);
-  margin-top: 3px;
-  letter-spacing: 0.5px;
-}
-
-.login-card-body {
-  padding: 28px;
-}
-
-.form-group {
-  margin-bottom: 20px;
-}
-
-.form-label {
-  display: block;
-  font-family: var(--sans);
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text2);
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-}
-
-.form-control {
-  width: 100%;
-  background: white;
-  border: 1.5px solid var(--border);
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 15px;
-  font-weight: 500;
-  padding: 11px 14px;
-  outline: none;
-  transition: border-color 0.2s;
-  border-radius: 2px;
-  -webkit-appearance: none;
-}
-
-.form-control:focus { border-color: var(--navy2); box-shadow: 0 0 0 3px rgba(26,35,126,0.08); }
-
-.form-select {
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%231a237e' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 14px center;
-  background-color: white;
-  padding-right: 40px;
-}
-
-.form-select option { font-size: 14px; }
-
-.btn-login {
-  width: 100%;
-  background: var(--saffron);
-  border: none;
-  color: white;
-  font-family: var(--sans);
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  padding: 14px;
-  cursor: pointer;
-  transition: background 0.2s;
-  text-transform: uppercase;
-  margin-top: 8px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  border-radius: 2px;
-}
-.btn-login:hover { background: var(--saff2); }
-
-.login-footer {
-  background: var(--gray1);
-  border-top: 1px solid var(--gray3);
-  padding: 12px 28px;
-  font-family: var(--sans);
-  font-size: 11px;
-  color: var(--text3);
-  text-align: center;
-}
-
-/* ── APP PAGES ── */
-#app { display: none; }
-
-/* ── DASHBOARD ── */
-#dashboard-page { display: block; }
-
-.page-header {
-  background: white;
-  border: 1px solid var(--border);
-  padding: 24px 28px;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  box-shadow: var(--shadow);
-}
-
-.ph-left {}
-
-.ph-eyebrow {
-  font-family: var(--sans);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--saffron);
-  margin-bottom: 4px;
-}
-
-.ph-title {
-  font-family: var(--serif);
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--navy);
-  line-height: 1;
-}
-
-.ph-desc {
-  font-family: var(--sans);
-  font-size: 13px;
-  color: var(--text3);
-  margin-top: 6px;
-}
-
-.ph-right {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.btn-primary {
-  background: var(--navy);
-  border: none;
-  color: white;
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  padding: 10px 22px;
-  cursor: pointer;
-  transition: background 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  border-radius: 2px;
-}
-.btn-primary:hover { background: var(--navy2); }
-
-.btn-outline {
-  background: white;
-  border: 1.5px solid var(--border);
-  color: var(--text2);
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 10px 18px;
-  cursor: pointer;
-  transition: all 0.2s;
-  border-radius: 2px;
-}
-.btn-outline:hover { border-color: var(--navy); color: var(--navy); }
+/* ── PAGE HEADER ── */
+.page-header{background:white;border:1px solid var(--border);padding:24px 28px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;box-shadow:var(--shadow);}
+.ph-eyebrow{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:4px;}
+.ph-title{font-family:var(--serif);font-size:28px;font-weight:700;color:var(--navy);line-height:1;}
+.ph-desc{font-family:var(--sans);font-size:13px;color:var(--text3);margin-top:6px;}
+.ph-right{display:flex;gap:10px;align-items:center;flex-wrap:wrap;}
+.btn-primary{background:var(--navy);border:none;color:white;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:0.5px;padding:10px 22px;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:6px;border-radius:2px;}
+.btn-primary:hover{background:var(--navy2);}
+.btn-outline{background:white;border:1.5px solid var(--border);color:var(--text2);font-family:var(--sans);font-size:13px;font-weight:600;padding:10px 18px;cursor:pointer;transition:all 0.2s;border-radius:2px;}
+.btn-outline:hover{border-color:var(--navy);color:var(--navy);}
 
 /* ── RUN CARDS ── */
-.runs-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-}
-
-.run-card {
-  background: white;
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  transition: box-shadow 0.2s, border-color 0.2s, transform 0.15s;
-  overflow: hidden;
-}
-
-.run-card:hover {
-  box-shadow: var(--shadow2);
-  border-color: var(--navy3);
-  transform: translateY(-2px);
-}
-
-.run-card-top-bar {
-  height: 4px;
-  background: var(--navy);
-}
-
-.run-card-body { padding: 20px 20px 16px; }
-
-.rc-number {
-  font-family: var(--mono);
-  font-size: 10px;
-  color: var(--saffron);
-  font-weight: 600;
-  letter-spacing: 1.5px;
-  margin-bottom: 6px;
-  text-transform: uppercase;
-}
-
-.rc-name {
-  font-family: var(--serif);
-  font-size: 20px;
-  font-weight: 700;
-  color: var(--navy);
-  margin-bottom: 10px;
-  line-height: 1.2;
-}
-
-.rc-tags {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-  margin-bottom: 14px;
-}
-
-.rc-tag {
-  background: var(--navy-lt);
-  color: var(--navy);
-  font-family: var(--sans);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1px;
-  padding: 2px 9px;
-  text-transform: uppercase;
-  border-radius: 1px;
-}
-
-.rc-progress-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 20px;
-  background: var(--gray1);
-  border-top: 1px solid var(--gray3);
-}
-
-.rc-progress-bar-wrap { flex: 1; }
-.rc-progress-label {
-  font-family: var(--sans);
-  font-size: 10px;
-  color: var(--text3);
-  font-weight: 600;
-  margin-bottom: 4px;
-  letter-spacing: 0.5px;
-}
-.rc-progress-track {
-  height: 5px;
-  background: var(--gray3);
-  border-radius: 3px;
-  overflow: hidden;
-}
-.rc-progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, var(--navy2), var(--saffron));
-  border-radius: 3px;
-  transition: width 0.5s ease;
-}
-.rc-arrow {
-  color: var(--navy3);
-  font-size: 18px;
-  transition: transform 0.2s;
-}
-.run-card:hover .rc-arrow { transform: translateX(4px); }
-
-.empty-box {
-  grid-column: 1/-1;
-  background: white;
-  border: 2px dashed var(--gray3);
-  padding: 60px 40px;
-  text-align: center;
-  color: var(--text3);
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
+.runs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;}
+.run-card{background:white;border:1px solid var(--border);box-shadow:var(--shadow);cursor:pointer;transition:box-shadow 0.2s,border-color 0.2s,transform 0.15s;overflow:hidden;}
+.run-card:hover{box-shadow:var(--shadow2);border-color:var(--navy3);transform:translateY(-2px);}
+.run-card-top-bar{height:4px;background:var(--navy);}
+.run-card-body{padding:20px 20px 16px;}
+.rc-number{font-family:var(--mono);font-size:10px;color:var(--saffron);font-weight:600;letter-spacing:1.5px;margin-bottom:6px;text-transform:uppercase;}
+.rc-name{font-family:var(--serif);font-size:20px;font-weight:700;color:var(--navy);margin-bottom:10px;line-height:1.2;}
+.rc-tags{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.rc-tag{background:var(--navy-lt);color:var(--navy);font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1px;padding:2px 9px;text-transform:uppercase;border-radius:1px;}
+.rc-progress-row{display:flex;align-items:center;gap:10px;padding:12px 20px;background:var(--gray1);border-top:1px solid var(--gray3);}
+.rc-progress-bar-wrap{flex:1;}
+.rc-progress-label{font-family:var(--sans);font-size:10px;color:var(--text3);font-weight:600;margin-bottom:4px;letter-spacing:0.5px;}
+.rc-progress-track{height:5px;background:var(--gray3);border-radius:3px;overflow:hidden;}
+.rc-progress-fill{height:100%;background:linear-gradient(90deg,var(--navy2),var(--saffron));border-radius:3px;transition:width 0.5s ease;}
+.rc-arrow{color:var(--navy3);font-size:18px;transition:transform 0.2s;}
+.run-card:hover .rc-arrow{transform:translateX(4px);}
+.empty-box{grid-column:1/-1;background:white;border:2px dashed var(--gray3);padding:60px 40px;text-align:center;color:var(--text3);font-family:var(--sans);font-size:14px;font-weight:500;letter-spacing:1px;text-transform:uppercase;}
 
 /* ── RUNSHEET ── */
-#runsheet-page { display: none; }
+#runsheet-page{display:none;}
+.rs-page-header{background:white;border:1px solid var(--border);padding:24px 28px;margin-bottom:20px;box-shadow:var(--shadow);}
+.rs-breadcrumb{font-family:var(--sans);font-size:12px;color:var(--text3);margin-bottom:12px;display:flex;align-items:center;gap:6px;}
+.rs-bc-link{color:var(--navy);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px;}
+.rs-bc-link:hover{color:var(--saffron);}
+.rs-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.rs-code{font-family:var(--mono);font-size:11px;color:var(--saffron);font-weight:600;letter-spacing:2px;text-transform:uppercase;margin-bottom:4px;}
+.rs-title{font-family:var(--serif);font-size:32px;font-weight:700;color:var(--navy);line-height:1.1;}
+.rs-meta{font-family:var(--sans);font-size:12px;color:var(--text3);margin-top:8px;display:flex;gap:16px;flex-wrap:wrap;}
+.rs-meta span::before{content:'· ';}
+.rs-meta span:first-child::before{content:'';}
+.btn-print{background:var(--green2);border:none;color:white;font-family:var(--sans);font-size:13px;font-weight:700;padding:10px 20px;cursor:pointer;transition:background 0.2s;display:flex;align-items:center;gap:6px;white-space:nowrap;flex-shrink:0;border-radius:2px;}
+.btn-print:hover{background:var(--green);}
 
-.rs-page-header {
-  background: white;
-  border: 1px solid var(--border);
-  padding: 24px 28px;
-  margin-bottom: 20px;
-  box-shadow: var(--shadow);
-}
+/* ── PRESENCE ── */
+.presence-panel{background:var(--green-lt);border:1px solid #a5d6a7;padding:10px 20px;margin-bottom:20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.presence-label{font-family:var(--sans);font-size:11px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--green2);flex-shrink:0;}
+.presence-chip{background:white;border:1px solid #a5d6a7;color:var(--green);font-family:var(--mono);font-size:11px;font-weight:600;padding:2px 10px;animation:popIn 0.25s ease;}
 
-.rs-breadcrumb {
-  font-family: var(--sans);
-  font-size: 12px;
-  color: var(--text3);
-  margin-bottom: 12px;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
+/* ── STEP BLOCK ── */
+.step-block{margin-bottom:6px;}
 
-.rs-bc-link {
-  color: var(--navy);
-  cursor: pointer;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 2px;
-}
-.rs-bc-link:hover { color: var(--saffron); }
+/* ── STEP CARD ── */
+.step-card{background:white;border:1px solid var(--border);box-shadow:0 1px 3px rgba(0,0,0,0.06);overflow:hidden;}
+.step-card.s-progress{border-left:4px solid var(--gold);}
+.step-card.s-pass{border-left:4px solid var(--green2);}
+.step-card.s-fail{border-left:4px solid var(--red);}
+.step-card.s-rework{border-left:4px solid var(--amber);}
+.step-header{padding:14px 20px;display:flex;align-items:center;gap:14px;cursor:pointer;transition:background 0.15s;user-select:none;background:white;}
+.step-header:hover{background:var(--navy-bg);}
+.step-num-badge{background:var(--navy);color:white;font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 10px;min-width:60px;text-align:center;flex-shrink:0;}
+.step-title-text{font-family:var(--sans);font-size:15px;font-weight:700;color:var(--navy);flex:1;letter-spacing:0.2px;}
+.step-badge{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 12px;border:1.5px solid;border-radius:1px;white-space:nowrap;}
+.sb-pending{border-color:var(--gray3);color:var(--text3);background:var(--gray1);}
+.sb-in_progress{border-color:var(--gold);color:#7b5800;background:#fffde7;}
+.sb-pass{border-color:var(--green2);color:var(--green);background:var(--green-lt);}
+.sb-fail{border-color:var(--red);color:var(--red);background:var(--red-lt);}
+.sb-rework{border-color:var(--amber);color:#7b3f00;background:var(--amber-lt);}
+.step-chevron{color:var(--text3);font-size:16px;transition:transform 0.2s;flex-shrink:0;}
+.step-body{border-top:1px solid var(--gray2);padding:24px;display:none;background:var(--off);}
+.step-body.open{display:block;animation:slideOpen 0.2s ease;}
 
-.rs-title-row {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-}
+/* ── WAFER + MASS PANEL ── */
+.wm-panel{background:var(--navy-lt);border:1px solid #c5cae9;border-left:4px solid var(--navy3);padding:16px 18px;margin-bottom:20px;}
+.wm-title{font-family:var(--sans);font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--navy2);margin-bottom:14px;}
+.wm-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 16px;}
+.wm-field{display:flex;flex-direction:column;gap:5px;}
+.wm-field.full{grid-column:1/-1;}
+.wm-label{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy2);}
+.wm-input,.wm-select{background:white;border:1.5px solid #c5cae9;color:var(--text);font-family:var(--sans);font-size:13px;font-weight:500;padding:8px 12px;outline:none;transition:border-color 0.2s;border-radius:2px;width:100%;-webkit-appearance:none;}
+.wm-input:focus,.wm-select:focus{border-color:var(--navy2);}
+.wm-select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%231a237e' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-color:white;padding-right:32px;}
+.wafer-chips-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px;}
+.wafer-chip{background:white;border:1.5px solid #9fa8da;color:var(--navy);font-family:var(--mono);font-size:11px;font-weight:600;padding:3px 12px;cursor:pointer;border-radius:2px;transition:all 0.15s;user-select:none;}
+.wafer-chip.selected{background:var(--navy);color:white;border-color:var(--navy);}
+.wafer-chip:hover:not(.selected){background:var(--navy-lt);}
 
-.rs-code {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--saffron);
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-}
+/* ── REF PARAMS ── */
+.ref-params{background:var(--navy-lt);border-left:4px solid var(--navy);padding:14px 18px;margin-bottom:22px;font-family:var(--sans);font-size:13px;}
+.rp-heading{font-family:var(--sans);font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--navy2);margin-bottom:10px;}
+.rp-row{display:flex;gap:12px;margin-bottom:4px;line-height:1.5;}
+.rp-key{font-weight:700;color:var(--navy);min-width:80px;flex-shrink:0;font-size:12px;}
+.rp-val{color:var(--text2);font-size:13px;}
 
-.rs-title {
-  font-family: var(--serif);
-  font-size: 32px;
-  font-weight: 700;
-  color: var(--navy);
-  line-height: 1.1;
-}
+/* ── LIVE FORM ── */
+.live-form-header{font-family:var(--sans);font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--saffron);margin-bottom:16px;padding-bottom:8px;border-bottom:1.5px solid var(--gray3);}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;margin-bottom:8px;}
+.fg{display:flex;flex-direction:column;gap:5px;}
+.fg.span2{grid-column:1/-1;}
+.fg label{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);}
+.fg input,.fg textarea,.fg select{background:white;border:1.5px solid var(--border);color:var(--text);font-family:var(--sans);font-size:14px;font-weight:500;padding:9px 12px;outline:none;transition:border-color 0.2s;width:100%;border-radius:2px;-webkit-appearance:none;}
+.fg input:focus,.fg textarea:focus,.fg select:focus{border-color:var(--navy2);box-shadow:0 0 0 3px rgba(26,35,126,0.08);}
+.fg textarea{resize:vertical;min-height:76px;}
+.fg select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%231a237e' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;background-color:white;}
+.step-foot{display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:16px;border-top:1.5px solid var(--gray3);flex-wrap:wrap;gap:12px;}
+.step-timestamp{font-family:var(--mono);font-size:11px;color:var(--text3);}
+.btn-save{background:var(--saffron);border:none;color:white;font-family:var(--sans);font-size:14px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:10px 28px;cursor:pointer;transition:background 0.2s;border-radius:2px;}
+.btn-save:hover{background:var(--saff2);}
+.btn-save:disabled{opacity:0.45;cursor:not-allowed;}
 
-.rs-meta {
-  font-family: var(--sans);
-  font-size: 12px;
-  color: var(--text3);
-  margin-top: 8px;
-  display: flex;
-  gap: 16px;
-  flex-wrap: wrap;
-}
+/* ── INSPECTION CARD ── */
+.insp-card{background:white;border:1px solid var(--teal-bd);border-left:4px solid var(--teal2);margin-top:3px;box-shadow:0 1px 3px rgba(0,0,0,0.06);overflow:hidden;}
+.insp-header{padding:12px 20px;display:flex;align-items:center;gap:12px;cursor:pointer;transition:background 0.15s;user-select:none;background:white;}
+.insp-header:hover{background:var(--teal-lt);}
+.insp-tag{background:var(--teal2);color:white;font-family:var(--mono);font-size:10px;font-weight:700;padding:3px 10px;letter-spacing:1px;flex-shrink:0;border-radius:1px;}
+.insp-title-text{font-family:var(--sans);font-size:13px;font-weight:700;color:var(--teal);flex:1;}
+.insp-badge{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 10px;border:1.5px solid;border-radius:1px;white-space:nowrap;}
+.ib-pending{border-color:var(--teal-bd);color:#80cbc4;background:white;}
+.ib-pass{border-color:var(--teal2);color:var(--teal);background:var(--teal-lt);}
+.ib-fail{border-color:var(--red);color:var(--red);background:var(--red-lt);}
+.ib-rework{border-color:var(--amber);color:#7b3f00;background:var(--amber-lt);}
+.insp-chevron{color:#80cbc4;font-size:15px;transition:transform 0.2s;flex-shrink:0;}
+.insp-body{border-top:1px solid var(--teal-bd);padding:22px;display:none;background:#f9fffe;}
+.insp-body.open{display:block;animation:slideOpen 0.2s ease;}
 
-.rs-meta span::before { content: '· '; }
-.rs-meta span:first-child::before { content: ''; }
+/* insp sections */
+.isec-title{font-family:var(--sans);font-size:9px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:var(--teal2);padding-bottom:7px;border-bottom:1px solid var(--teal-bd);margin-bottom:14px;margin-top:18px;}
+.isec-title:first-child{margin-top:0;}
 
-.btn-print {
-  background: var(--green2);
-  border: none;
-  color: white;
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 700;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  border-radius: 2px;
-}
-.btn-print:hover { background: var(--green); }
+/* dry run */
+.dry-row{background:var(--amber-lt);border:1px solid var(--amber-bd);padding:11px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;border-radius:2px;}
+.dry-label{font-family:var(--sans);font-size:11px;font-weight:800;color:#7b3f00;letter-spacing:1px;text-transform:uppercase;flex-shrink:0;}
+.dry-opts{display:flex;gap:8px;}
+.dry-opt{background:white;border:1.5px solid var(--amber-bd);color:#7b3f00;font-family:var(--sans);font-size:12px;font-weight:700;padding:4px 14px;cursor:pointer;border-radius:2px;transition:all 0.15s;user-select:none;}
+.dry-opt.on{background:var(--amber);border-color:var(--amber);color:white;}
 
-/* ── PRESENCE BAR ── */
-.presence-panel {
-  background: var(--green-lt);
-  border: 1px solid #a5d6a7;
-  padding: 10px 20px;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
+/* visual grid */
+.vgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px 14px;}
+.vf{display:flex;flex-direction:column;gap:5px;}
+.vf.full{grid-column:1/-1;}
+.vf.half{grid-column:span 1;}
+.vf label{font-family:var(--sans);font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);}
+.vf input,.vf select,.vf textarea{background:white;border:1.5px solid var(--teal-bd);color:var(--text);font-family:var(--sans);font-size:13px;font-weight:500;padding:8px 11px;outline:none;transition:border-color 0.2s;border-radius:2px;width:100%;-webkit-appearance:none;}
+.vf input:focus,.vf select:focus,.vf textarea:focus{border-color:var(--teal2);}
+.vf textarea{resize:vertical;min-height:70px;}
+.vf select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%2300897b' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-color:white;}
 
-.presence-label {
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--green2);
-  flex-shrink: 0;
-}
+/* geometry checks */
+.gc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
+.gc-item{display:flex;align-items:center;gap:8px;background:var(--teal-lt);border:1px solid var(--teal-bd);padding:7px 10px;border-radius:2px;cursor:pointer;transition:all 0.15s;user-select:none;}
+.gc-item.on{background:var(--teal2);border-color:var(--teal);}
+.gc-box{width:15px;height:15px;border:2px solid #80cbc4;border-radius:2px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;}
+.gc-item.on .gc-box{background:var(--teal);border-color:var(--teal);}
+.gc-text{font-family:var(--sans);font-size:11px;font-weight:600;color:var(--teal);line-height:1.2;}
+.gc-item.on .gc-text{color:white;}
 
-.presence-chip {
-  background: white;
-  border: 1px solid #a5d6a7;
-  color: var(--green);
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 2px 10px;
-  animation: popIn 0.25s ease;
-}
-
-/* ── STEPS ── */
-.step-card {
-  background: white;
-  border: 1px solid var(--border);
-  margin-bottom: 8px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-  overflow: hidden;
-}
-
-.step-card.s-progress { border-left: 4px solid var(--gold); }
-.step-card.s-pass     { border-left: 4px solid var(--green2); }
-.step-card.s-fail     { border-left: 4px solid #c62828; }
-.step-card.s-rework   { border-left: 4px solid #f57f17; }
-
-.step-header {
-  padding: 14px 20px;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  cursor: pointer;
-  transition: background 0.15s;
-  user-select: none;
-  background: white;
-}
-.step-header:hover { background: var(--navy-bg); }
-
-.step-num-badge {
-  background: var(--navy);
-  color: white;
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 3px 10px;
-  min-width: 60px;
-  text-align: center;
-  flex-shrink: 0;
-}
-
-.step-title-text {
-  font-family: var(--sans);
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--navy);
-  flex: 1;
-  letter-spacing: 0.2px;
-}
-
-.step-badge {
-  font-family: var(--sans);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  padding: 3px 12px;
-  border: 1.5px solid;
-  border-radius: 1px;
-  white-space: nowrap;
-}
-.sb-pending   { border-color: var(--gray3); color: var(--text3); background: var(--gray1); }
-.sb-in_progress { border-color: var(--gold); color: #7b5800; background: #fffde7; }
-.sb-pass      { border-color: var(--green2); color: var(--green); background: var(--green-lt); }
-.sb-fail      { border-color: #c62828; color: #c62828; background: #ffebee; }
-.sb-rework    { border-color: #f57f17; color: #7b3f00; background: #fff8e1; }
-
-.step-chevron {
-  color: var(--text3);
-  font-size: 16px;
-  transition: transform 0.2s;
-  flex-shrink: 0;
-}
-
-.step-body {
-  border-top: 1px solid var(--gray2);
-  padding: 24px;
-  display: none;
-  background: var(--off);
-}
-.step-body.open { display: block; animation: slideOpen 0.2s ease; }
-.step-body.open + .step-header .step-chevron,
-.open-card .step-chevron { transform: rotate(90deg); }
-
-/* fixed params */
-.ref-params {
-  background: var(--navy-lt);
-  border-left: 4px solid var(--navy);
-  padding: 14px 18px;
-  margin-bottom: 22px;
-  font-family: var(--sans);
-  font-size: 13px;
-}
-
-.rp-heading {
-  font-family: var(--sans);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--navy2);
-  margin-bottom: 10px;
-}
-
-.rp-row {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 4px;
-  line-height: 1.5;
-}
-
-.rp-key {
-  font-weight: 700;
-  color: var(--navy);
-  min-width: 80px;
-  flex-shrink: 0;
-  font-size: 12px;
-}
-
-.rp-val {
-  color: var(--text2);
-  font-size: 13px;
-}
-
-/* live entry form */
-.live-form-header {
-  font-family: var(--sans);
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--saffron);
-  margin-bottom: 16px;
-  padding-bottom: 8px;
-  border-bottom: 1.5px solid var(--gray3);
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px 18px;
-  margin-bottom: 8px;
-}
-
-.fg { display: flex; flex-direction: column; gap: 5px; }
-.fg.span2 { grid-column: 1/-1; }
-
-.fg label {
-  font-family: var(--sans);
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text3);
-}
-
-.fg input, .fg textarea, .fg select {
-  background: white;
-  border: 1.5px solid var(--border);
-  color: var(--text);
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 500;
-  padding: 9px 12px;
-  outline: none;
-  transition: border-color 0.2s;
-  width: 100%;
-  border-radius: 2px;
-  -webkit-appearance: none;
-}
-
-.fg input:focus, .fg textarea:focus, .fg select:focus {
-  border-color: var(--navy2);
-  box-shadow: 0 0 0 3px rgba(26,35,126,0.08);
-}
-
-.fg textarea { resize: vertical; min-height: 76px; }
-
-.fg select {
-  cursor: pointer;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%231a237e' stroke-width='1.8' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-color: white;
-}
-
-.step-foot {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1.5px solid var(--gray3);
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.step-timestamp {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--text3);
-}
-
-.btn-save {
-  background: var(--saffron);
-  border: none;
-  color: white;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 800;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  padding: 10px 28px;
-  cursor: pointer;
-  transition: background 0.2s;
-  border-radius: 2px;
-}
-.btn-save:hover { background: var(--saff2); }
-.btn-save:disabled { opacity: 0.45; cursor: not-allowed; }
+.insp-foot{display:flex;align-items:center;justify-content:space-between;margin-top:18px;padding-top:14px;border-top:1px solid var(--teal-bd);flex-wrap:wrap;gap:10px;}
+.insp-ts{font-family:var(--mono);font-size:11px;color:#80cbc4;}
+.btn-save-insp{background:var(--teal2);border:none;color:white;font-family:var(--sans);font-size:13px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:9px 24px;cursor:pointer;transition:background 0.2s;border-radius:2px;}
+.btn-save-insp:hover{background:var(--teal);}
+.btn-save-insp:disabled{opacity:0.45;cursor:not-allowed;}
 
 /* ── MODAL ── */
-.modal-backdrop {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.55);
-  z-index: 300;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(3px);
-}
-.modal-backdrop.open { display: flex; }
-
-.modal-box {
-  background: white;
-  width: 480px;
-  box-shadow: 0 16px 48px rgba(0,0,0,0.2);
-  animation: popIn 0.25s ease;
-  overflow: hidden;
-}
-
-.modal-head {
-  background: var(--navy);
-  padding: 20px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.modal-title {
-  font-family: var(--serif);
-  font-size: 20px;
-  font-weight: 700;
-  color: white;
-}
-
-.modal-close {
-  background: none;
-  border: none;
-  color: rgba(255,255,255,0.7);
-  font-size: 22px;
-  cursor: pointer;
-  line-height: 1;
-  transition: color 0.2s;
-}
-.modal-close:hover { color: white; }
-
-.modal-body { padding: 28px 24px 24px; }
+.modal-backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:300;align-items:center;justify-content:center;backdrop-filter:blur(3px);}
+.modal-backdrop.open{display:flex;}
+.modal-box{background:white;width:480px;box-shadow:0 16px 48px rgba(0,0,0,0.2);animation:popIn 0.25s ease;overflow:hidden;}
+.modal-head{background:var(--navy);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;}
+.modal-title{font-family:var(--serif);font-size:20px;font-weight:700;color:white;}
+.modal-close{background:none;border:none;color:rgba(255,255,255,0.7);font-size:22px;cursor:pointer;line-height:1;transition:color 0.2s;}
+.modal-close:hover{color:white;}
+.modal-body{padding:28px 24px 24px;}
+.modal-note{background:var(--navy-lt);border-left:3px solid var(--navy);padding:10px 14px;font-family:var(--sans);font-size:12px;color:var(--navy);font-weight:500;margin-bottom:18px;border-radius:0 2px 2px 0;}
 
 /* ── TOAST ── */
-.toast {
-  position: fixed;
-  bottom: 24px;
-  right: 24px;
-  background: var(--navy);
-  color: white;
-  font-family: var(--sans);
-  font-size: 14px;
-  font-weight: 600;
-  padding: 12px 20px;
-  z-index: 9000;
-  display: none;
-  box-shadow: var(--shadow2);
-  animation: slideUp 0.3s ease;
-  border-left: 4px solid var(--saffron);
-  min-width: 240px;
-}
-.toast.err { border-left-color: #c62828; }
-.toast.ok { border-left-color: var(--green2); }
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:white;font-family:var(--sans);font-size:14px;font-weight:600;padding:12px 20px;z-index:9000;display:none;box-shadow:var(--shadow2);animation:slideUp 0.3s ease;border-left:4px solid var(--saffron);min-width:240px;}
+.toast.err{border-left-color:var(--red);}
+.toast.ok{border-left-color:var(--green2);}
 
 /* ── FOOTER ── */
-.site-footer {
-  background: var(--navy);
-  color: rgba(255,255,255,0.6);
-  text-align: center;
-  padding: 16px 32px;
-  font-family: var(--sans);
-  font-size: 11px;
-  margin-top: 48px;
-  letter-spacing: 0.5px;
-}
+.site-footer{background:var(--navy);color:rgba(255,255,255,0.6);text-align:center;padding:16px 32px;font-family:var(--sans);font-size:11px;margin-top:48px;letter-spacing:0.5px;}
 
-/* ── ANIMATIONS ── */
-@keyframes blink    { 0%,100%{opacity:1} 50%{opacity:0.2} }
-@keyframes popIn    { from{opacity:0;transform:scale(0.96)} to{opacity:1;transform:scale(1)} }
-@keyframes slideUp  { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
-@keyframes slideOpen{ from{opacity:0;transform:translateY(-4px)} to{opacity:1;transform:translateY(0)} }
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.2}}
+@keyframes popIn{from{opacity:0;transform:scale(0.96)}to{opacity:1;transform:scale(1)}}
+@keyframes slideUp{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes slideOpen{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 
-/* ── PRINT ── */
-@media print {
-  .gov-strip, .topnav, .rs-breadcrumb, .rs-title-row .btn-print,
-  .presence-panel, .step-foot, .site-footer { display: none !important; }
-  body { background: white; }
-  .step-body { display: block !important; border-top: 1px solid #ddd; }
-  .step-card { border: 1px solid #ccc; margin-bottom: 10px; page-break-inside: avoid; box-shadow: none; }
-  .step-header { background: #f0f4ff; }
-  .ref-params { background: #f5f5ff; }
-  .fg input, .fg textarea, .fg select { border-color: #ddd; }
-  #dashboard-page { display: none !important; }
-  .main-wrap { padding: 0; max-width: 100%; }
+@media print{
+  .topnav,.rs-breadcrumb,.btn-print,.presence-panel,.step-foot,.insp-foot,.wm-panel,.site-footer{display:none!important;}
+  body{background:white;}
+  .step-body,.insp-body{display:block!important;border-top:1px solid #ddd;}
+  .step-card,.insp-card{border:1px solid #ccc;margin-bottom:8px;page-break-inside:avoid;box-shadow:none;}
+  .step-header{background:#f0f4ff!important;}
+  .ref-params{background:#f5f5ff!important;}
+  .fg input,.fg textarea,.fg select{border-color:#ddd;}
+  #dashboard-page{display:none!important;}
+  .main-wrap{padding:0;max-width:100%;}
 }
 </style>
 </head>
 <body>
 
-<!-- GOV STRIP -->
-<div class="gov-strip">
-  <div class="gov-strip-left">
-    <div class="gov-emblem-circle">🦁</div>
-    <div class="gov-strip-text">
-      <strong>Government of India — Ministry of Defence</strong>
-      Defence Research & Development Organisation (DRDO)
-    </div>
-  </div>
-  <div class="tricolor-bar">
-    <span class="tc1"></span>
-    <span class="tc2" style="border-top:1px solid #ddd;border-bottom:1px solid #ddd;"></span>
-    <span class="tc3"></span>
-  </div>
-</div>
-
-<!-- SITE HEADER -->
+<!-- SITE HEADER — no org name -->
 <div class="site-header">
   <div class="site-header-inner">
     <div class="header-brand">
       <div class="header-logo-block">⚛️</div>
-      <div class="header-title-block">
+      <div>
         <div class="header-app-name">Laser<span>Sheet</span></div>
-        <div class="header-org-name">DRDO · Solid State Physics Laboratory, New Delhi</div>
       </div>
     </div>
     <div class="header-right">
-      <div class="header-tagline">Laser Fabrication Process Tracking & Documentation</div>
-      <div class="header-classification">Restricted — Internal Use Only</div>
+      <div class="header-tagline">Fabrication Process Tracking &amp; Documentation</div>
     </div>
   </div>
 </div>
 
-<!-- TOPNAV (shown when logged in) -->
+<!-- TOPNAV -->
 <div class="topnav" id="topnav">
-  <div class="tn-crumb">
-    <span>LaserSheet</span>
-    <span>›</span>
-    <strong id="tn-section">Dashboard</strong>
-  </div>
+  <div class="tn-crumb"><span>LaserSheet</span><span>›</span><strong id="tn-section">Dashboard</strong></div>
   <div class="tn-right">
-    <div class="live-indicator"><div class="live-dot"></div> Live Sync</div>
+    <div class="live-indicator"><div class="live-dot"></div>Live Sync</div>
     <div class="user-badge" id="user-badge"></div>
     <button class="btn-exit" onclick="doLogout()">Sign Out</button>
   </div>
 </div>
 
-<!-- ════ LOGIN ════ -->
+<!-- LOGIN -->
 <div id="login-page">
   <div class="login-outer">
-    <div class="login-notice">
-      🔒 This system is for authorised DRDO SSPL personnel only. Unauthorised access is prohibited.
-    </div>
     <div class="login-card">
       <div class="login-card-header">
         <div class="login-card-icon">📋</div>
         <div>
-          <div class="login-card-title">Operator Sign In</div>
-          <div class="login-card-sub">LaserSheet · DRDO SSPL Fabrication Tracking</div>
+          <div class="login-card-title">Sign In to LaserSheet</div>
+          <div class="login-card-sub">Fabrication process tracking &amp; documentation</div>
         </div>
       </div>
       <div class="login-card-body">
@@ -1129,28 +314,21 @@ body {
           <input class="form-control" id="login-name" type="text" placeholder="Enter your full name" autocomplete="off">
         </div>
         <div class="form-group">
-          <label class="form-label" for="login-role">Role / Designation</label>
+          <label class="form-label" for="login-role">Role</label>
           <select class="form-control form-select" id="login-role">
-            <option value="Operator">Operator</option>
-            <option value="Senior Operator">Senior Operator</option>
-            <option value="Supervisor">Supervisor</option>
-            <option value="Engineer">Engineer</option>
             <option value="Scientist">Scientist</option>
-            <option value="Scientist-C">Scientist-C</option>
-            <option value="Scientist-D">Scientist-D</option>
-            <option value="Director">Director</option>
+            <option value="Technical Officer">Technical Officer</option>
+            <option value="Technician">Technician</option>
           </select>
         </div>
         <button class="btn-login" onclick="doLogin()">Sign In &amp; Continue →</button>
       </div>
-      <div class="login-footer">
-        For access issues contact the System Administrator · SSPL IT Cell
-      </div>
+      <div class="login-footer">Enter your credentials to access the fabrication runsheet</div>
     </div>
   </div>
 </div>
 
-<!-- ════ APP ════ -->
+<!-- APP -->
 <div id="app">
   <div class="main-wrap">
 
@@ -1167,9 +345,7 @@ body {
           <button class="btn-outline" onclick="loadRuns()">↻ Refresh</button>
         </div>
       </div>
-      <div class="runs-grid" id="runs-grid">
-        <div class="empty-box">Loading…</div>
-      </div>
+      <div class="runs-grid" id="runs-grid"><div class="empty-box">Loading…</div></div>
     </div>
 
     <!-- Runsheet -->
@@ -1177,8 +353,7 @@ body {
       <div class="rs-page-header">
         <div class="rs-breadcrumb">
           <span class="rs-bc-link" onclick="showDash()">Fabrication Runs</span>
-          <span>›</span>
-          <span id="rs-bc-name">—</span>
+          <span>›</span><span id="rs-bc-name">—</span>
         </div>
         <div class="rs-title-row">
           <div>
@@ -1189,17 +364,15 @@ body {
           <button class="btn-print" onclick="window.print()">🖨 Print Runsheet</button>
         </div>
       </div>
-
       <div class="presence-panel" id="presence-panel">
         <span class="presence-label">Active Now:</span>
         <span id="presence-chips">—</span>
       </div>
-
       <div id="steps-container"></div>
     </div>
 
-  </div><!-- /main-wrap -->
-</div><!-- /app -->
+  </div>
+</div>
 
 <!-- Modal -->
 <div class="modal-backdrop" id="modal-bd">
@@ -1209,9 +382,10 @@ body {
       <button class="modal-close" onclick="closeModal()">×</button>
     </div>
     <div class="modal-body">
+      <div class="modal-note">💡 Set the number of wafers in this run — you can select which wafers are involved at each step.</div>
       <div class="form-group">
-        <label class="form-label">Run Name / Wafer ID</label>
-        <input class="form-control" id="new-name" placeholder="e.g. SSPL-GaN-2026-047">
+        <label class="form-label">Run Name / Sample ID</label>
+        <input class="form-control" id="new-name" placeholder="e.g. GaN-Run-2026-047">
       </div>
       <div class="form-group" style="margin-top:16px">
         <label class="form-label">Process Type</label>
@@ -1223,50 +397,47 @@ body {
           <option>Custom Process</option>
         </select>
       </div>
+      <div class="form-group" style="margin-top:16px">
+        <label class="form-label">Number of Wafers</label>
+        <input class="form-control" id="new-wafer-count" type="number" min="1" max="50" placeholder="e.g. 5" value="1">
+      </div>
       <button class="btn-login" onclick="createRun()" style="margin-top:20px">Create Run →</button>
     </div>
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
-<!-- Site Footer -->
-<div class="site-footer">
-  LaserSheet — DRDO SSPL Laser Fabrication Tracking System &nbsp;|&nbsp;
-  Solid State Physics Laboratory, Lucknow Road, Timarpur, Delhi - 110 054 &nbsp;|&nbsp;
-  For official use only
-</div>
+<div class="site-footer">LaserSheet — Fabrication Process Tracking System &nbsp;|&nbsp; Internal Use Only</div>
 
 <script>
-/* ─── CONFIG ─── */
-const SB = 'https://nshngyvayyiqdklfhqlh.supabase.co';
-const KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zaG5neXZheXlpcWRrbGZocWxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NjU5MzEsImV4cCI6MjA5NjA0MTkzMX0.0IVmcjO-JHPFJwnTrYjLU8lItIXVyKWScsdZ8s63hhs';
-const H = {'Content-Type':'application/json','apikey':KEY,'Authorization':`Bearer ${KEY}`,'Prefer':'return=representation'};
+const SB='https://nshngyvayyiqdklfhqlh.supabase.co';
+const KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5zaG5neXZheXlpcWRrbGZocWxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NjU5MzEsImV4cCI6MjA5NjA0MTkzMX0.0IVmcjO-JHPFJwnTrYjLU8lItIXVyKWScsdZ8s63hhs';
+const H={'Content-Type':'application/json','apikey':KEY,'Authorization':`Bearer ${KEY}`,'Prefer':'return=representation'};
 
-/* ─── STEPS ─── */
-const STEPS = [
-  {n:'0',  name:'Pre-Clean',                    tool:'wbclean / wbflexcorr',            recipe:'SC1 + HF Dip + SC2',            params:'SC1: 5:1:1 H₂O:H₂O₂:NH₄OH @ 50°C, 10 min | HF dip: 50:1 DI:HF @ RT, 30 sec | SC2: 5:1:1 H₂O:H₂O₂:HCl @ 50°C, 10 min', f:['op','dt','meas','com','st']},
-  {n:'1',  name:'Epitaxy / MOCVD Growth',        tool:'aix-ccs (MOCVD)',                 recipe:'See MOCVD log book',             params:'AlGaN/GaN heterostructure on Si or SiC substrate | Season chamber before run | Confirm recipe in MOCVD log book', f:['op','dt','tool','rec','meas','com','st']},
-  {n:'2',  name:'Spin & Bake (Resist Coat)',     tool:'Headway spinner / hotplate',      recipe:'SPR3612 or CSAR 62.09',         params:'Dehydration bake: 3 min @ 180°C | Spin: 60s @ 6000 RPM, 2000 RPM/s ramp | Soft bake: 1 min @ 90°C | Use carrier wafer', f:['op','dt','tool','rec','meas','com','st']},
-  {n:'3',  name:'Lithography (Exposure)',        tool:'Heidelberg / JEOL e-beam',        recipe:'Uploaded layout file',          params:'JEOL: 4 nm shot size, 320 µC/cm² dose | Heidelberg: 80/−2 focus offset | Align to previous layer', f:['op','dt','tool','rec','par','meas','com','st']},
-  {n:'4',  name:'Post-Expose Bake & Develop',   tool:'hotplate / wbdev',                recipe:'MF26A or Xylenes/IPA',          params:'Post exp bake: 1 min @ 115°C | Develop: 40s Xylenes, 10s IPA, N₂ blow dry | Inspect under microscope', f:['op','dt','tool','rec','meas','com','st']},
-  {n:'5',  name:'Inspection',                   tool:'Optical microscope / SEM',        recipe:'—',                             params:'Check pattern resolution, alignment, edge quality | Inspect all wafers | Document all defects found | PASS to continue', f:['op','dt','tool','meas','com','st']},
-  {n:'6',  name:'Plasma Etch (Dry)',             tool:'oxford-rie / oxford-35 / lampoly',recipe:'XlabGaNslowetch',               params:'AlGaN/GaN etch rate ~50 nm/min | Clean chamber 1–4 hrs before | Season 10–15 min | Descum: drytek2, 90 sec', f:['op','dt','tool','rec','par','meas','com','st']},
-  {n:'7',  name:'Piranha Clean',                tool:'wbflexcorr',                      recipe:'9:1 H₂SO₄:H₂O₂',               params:'~120°C, 15–20 min | Dump rinse | Teflon chip holder required | SC1 & SC2 @ 50°C, 10 min each | DI water rinse', f:['op','dt','meas','com','st']},
-  {n:'8',  name:'ALD / Passivation',            tool:'Fiji2 (ALD)',                     recipe:'Thermal Al₂O₃, 250°C',          params:'Season ALD chamber | Rinse: Acetone/IPA, 2 min | 200–250 cycles (~20–25 nm Al₂O₃) | Surface should show yellow hue', f:['op','dt','tool','rec','meas','com','st']},
-  {n:'9',  name:'Metal Evaporation (Ohmic)',    tool:'AJA evaporator',                  recipe:'Ti/Al/Pt/Au 20/100/40/80 nm',  params:'Max 1 Å/sec deposition rate | O-plasma 90 sec @ 100W before load | Vacuum < 5×10⁻⁷ Torr before deposition', f:['op','dt','tool','rec','par','meas','com','st']},
-  {n:'10', name:'Liftoff',                      tool:'wbflexsolv',                      recipe:'1165 remover / Acetone/IPA',    params:'Submerge in 1165 for 10 min | Spray acetone quickly | IPA rinse | Overnight soak if needed | Inspect under microscope', f:['op','dt','meas','com','st']},
-  {n:'11', name:'RTA (Rapid Thermal Anneal)',   tool:'awin_r (RTA)',                    recipe:'Recipe P — 850°C, 35 sec',     params:'Run dummies first | Ohmic contact anneal | Verify contact resistance via TLM measurement after anneal', f:['op','dt','tool','rec','par','meas','com','st']},
-  {n:'12', name:'Mesa Etch Lithography',        tool:'Headway / hotplate / Heidelberg', recipe:'SPR3612',                       params:'Dehydrate 5 min @ 150°C | HMDS 30 min YES oven | Spin 60s @ 5000 RPM | Pre-bake 1 min @ 90°C | Hard bake 5 min @ 110°C', f:['op','dt','tool','rec','meas','com','st']},
-  {n:'13', name:'Mesa Etch (AlGaN/GaN)',        tool:'oxford-35',                       recipe:'XlabGaNslowetch',               params:'TLM pieces only | Clean 15 min | Season 15 min | Etch ~2 min @ 50 nm/min | Santovac oil on carrier wafer | Descum: drytek2, 2 min', f:['op','dt','tool','rec','par','meas','com','st']},
-  {n:'14', name:'Gate Metal Litho & Evaporation',tool:'Headway / AJA',                 recipe:'Ti/Pt 50/20 nm',               params:'Spin LOL 3000 RPM @ 170°C | Resist 5000 RPM | Heidelberg 90/−2 exposure | Hard bake 5 min | Descum 3 min | AJA evaporation', f:['op','dt','tool','rec','par','meas','com','st']},
-  {n:'15', name:'Final Inspection & Cleave',    tool:'Microscope / wafersaw',           recipe:'—',                             params:'Inspect contacts, mesa, gate fingers | Dice with wafersaw | Dehydrate 5 min @ 115°C after dicing | Document final wafer map', f:['op','dt','tool','meas','com','st']},
-  {n:'16', name:'LIV / Electrical Test',        tool:'Probe station / parameter analyser',recipe:'—',                          params:'TLM for contact resistance | I-V characteristics | Transconductance (gm) | Pinch-off voltage | Breakdown voltage | Record in lab notebook', f:['op','dt','tool','meas','com','st']}
+const STEPS=[
+  {n:'0', name:'Pre-Clean', tool:'wbclean / wbflexcorr', recipe:'SC1 + HF Dip + SC2', params:'SC1: 5:1:1 H₂O:H₂O₂:NH₄OH @ 50°C, 10 min | HF dip: 50:1 DI:HF @ RT, 30 sec | SC2: 5:1:1 H₂O:H₂O₂:HCl @ 50°C, 10 min', f:['op','dt','meas','com','st']},
+  {n:'1', name:'Epitaxy / MOCVD Growth', tool:'aix-ccs (MOCVD)', recipe:'See MOCVD log book', params:'AlGaN/GaN heterostructure on Si or SiC substrate | Season chamber before run | Confirm recipe in MOCVD log book', f:['op','dt','tool','rec','meas','com','st']},
+  {n:'2', name:'Spin & Bake (Resist Coat)', tool:'Headway spinner / hotplate', recipe:'SPR3612 or CSAR 62.09', params:'Dehydration bake: 3 min @ 180°C | Spin: 60s @ 6000 RPM, 2000 RPM/s ramp | Soft bake: 1 min @ 90°C | Use carrier wafer', f:['op','dt','tool','rec','meas','com','st']},
+  {n:'3', name:'Lithography (Exposure)', tool:'Heidelberg / JEOL e-beam', recipe:'Uploaded layout file', params:'JEOL: 4 nm shot size, 320 µC/cm² dose | Heidelberg: 80/−2 focus offset | Align to previous layer', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'4', name:'Post-Expose Bake & Develop', tool:'hotplate / wbdev', recipe:'MF26A or Xylenes/IPA', params:'Post exp bake: 1 min @ 115°C | Develop: 40s Xylenes, 10s IPA, N₂ blow dry | Inspect under microscope', f:['op','dt','tool','rec','meas','com','st']},
+  {n:'5', name:'Inspection', tool:'Optical microscope / SEM', recipe:'—', params:'Check pattern resolution, alignment, edge quality | Inspect all wafers | Document all defects found | PASS to continue', f:['op','dt','tool','meas','com','st']},
+  {n:'6', name:'Plasma Etch (Dry)', tool:'oxford-rie / oxford-35 / lampoly', recipe:'XlabGaNslowetch', params:'AlGaN/GaN etch rate ~50 nm/min | Clean chamber 1–4 hrs before | Season 10–15 min | Descum: drytek2, 90 sec', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'7', name:'Piranha Clean', tool:'wbflexcorr', recipe:'9:1 H₂SO₄:H₂O₂', params:'~120°C, 15–20 min | Dump rinse | Teflon chip holder required | SC1 & SC2 @ 50°C, 10 min each | DI water rinse', f:['op','dt','meas','com','st']},
+  {n:'8', name:'ALD / Passivation', tool:'Fiji2 (ALD)', recipe:'Thermal Al₂O₃, 250°C', params:'Season ALD chamber | Rinse: Acetone/IPA, 2 min | 200–250 cycles (~20–25 nm Al₂O₃) | Surface should show yellow hue', f:['op','dt','tool','rec','meas','com','st']},
+  {n:'9', name:'Metal Evaporation (Ohmic)', tool:'AJA evaporator', recipe:'Ti/Al/Pt/Au 20/100/40/80 nm', params:'Max 1 Å/sec deposition rate | O-plasma 90 sec @ 100W before load | Vacuum < 5×10⁻⁷ Torr before deposition', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'10', name:'Liftoff', tool:'wbflexsolv', recipe:'1165 remover / Acetone/IPA', params:'Submerge in 1165 for 10 min | Spray acetone quickly | IPA rinse | Overnight soak if needed | Inspect under microscope', f:['op','dt','meas','com','st']},
+  {n:'11', name:'RTA (Rapid Thermal Anneal)', tool:'awin_r (RTA)', recipe:'Recipe P — 850°C, 35 sec', params:'Run dummies first | Ohmic contact anneal | Verify contact resistance via TLM measurement after anneal', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'12', name:'Mesa Etch Lithography', tool:'Headway / hotplate / Heidelberg', recipe:'SPR3612', params:'Dehydrate 5 min @ 150°C | HMDS 30 min YES oven | Spin 60s @ 5000 RPM | Pre-bake 1 min @ 90°C | Hard bake 5 min @ 110°C', f:['op','dt','tool','rec','meas','com','st']},
+  {n:'13', name:'Mesa Etch (AlGaN/GaN)', tool:'oxford-35', recipe:'XlabGaNslowetch', params:'TLM pieces only | Clean 15 min | Season 15 min | Etch ~2 min @ 50 nm/min | Santovac oil on carrier wafer | Descum: drytek2, 2 min', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'14', name:'Gate Metal Litho & Evaporation', tool:'Headway / AJA', recipe:'Ti/Pt 50/20 nm', params:'Spin LOL 3000 RPM @ 170°C | Resist 5000 RPM | Heidelberg 90/−2 exposure | Hard bake 5 min | Descum 3 min | AJA evaporation', f:['op','dt','tool','rec','par','meas','com','st']},
+  {n:'15', name:'Final Inspection & Cleave', tool:'Microscope / wafersaw', recipe:'—', params:'Inspect contacts, mesa, gate fingers | Dice with wafersaw | Dehydrate 5 min @ 115°C after dicing | Document final wafer map', f:['op','dt','tool','meas','com','st']},
+  {n:'16', name:'LIV / Electrical Test', tool:'Probe station / parameter analyser', recipe:'—', params:'TLM for contact resistance | I-V characteristics | Transconductance (gm) | Pinch-off voltage | Breakdown voltage | Record in lab notebook', f:['op','dt','tool','meas','com','st']}
 ];
 
-/* ─── STATE ─── */
-let CU=null, CRid=null, pollT=null, presT=null;
+const GEOM_CHECKS=['Pattern alignment','Edge definition','Critical dimension','Uniformity','Surface flatness','No delamination','No pinholes','No bridging','Etch depth OK'];
+
+let CU=null,CRid=null,pollT=null,presT=null,RW=[];
 
 const esc=s=>!s?'':String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 const localNow=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,16);};
@@ -1276,11 +447,11 @@ async function api(method,table,qs='',body=null){
   return r.json().catch(()=>({}));
 }
 
-/* ─── AUTH ─── */
+/* AUTH */
 function doLogin(){
   const name=document.getElementById('login-name').value.trim();
   const role=document.getElementById('login-role').value;
-  if(!name){toast('Please enter your name',false);return;}
+  if(!name){toast('Please enter your name');return;}
   CU={name,role};
   document.getElementById('login-page').style.display='none';
   document.getElementById('app').style.display='block';
@@ -1288,52 +459,48 @@ function doLogin(){
   document.getElementById('user-badge').textContent=`${name} · ${role}`;
   loadRuns();
 }
-
 function doLogout(){
   clearInterval(pollT);clearInterval(presT);
-  CU=null;CRid=null;
+  CU=null;CRid=null;RW=[];
   document.getElementById('app').style.display='none';
   document.getElementById('topnav').classList.remove('visible');
   document.getElementById('login-page').style.display='flex';
   document.getElementById('login-name').value='';
 }
 
-/* ─── DASHBOARD ─── */
+/* DASHBOARD */
 async function loadRuns(){
   document.getElementById('tn-section').textContent='Dashboard';
   const g=document.getElementById('runs-grid');
   g.innerHTML='<div class="empty-box">Loading runs…</div>';
   try{
     const runs=await api('GET','runs','order=created_at.desc');
-    if(!Array.isArray(runs)||!runs.length){
-      g.innerHTML='<div class="empty-box">No runs yet — create the first one above</div>';
-      return;
-    }
+    if(!Array.isArray(runs)||!runs.length){g.innerHTML='<div class="empty-box">No runs yet — create the first one above</div>';return;}
     g.innerHTML='';
     for(const r of runs){
       const entries=await api('GET','runsheet_entries',`run_id=eq.${r.id}&select=status`);
       const done=Array.isArray(entries)?entries.filter(e=>['PASS','FAIL','REWORK'].includes(e.status)).length:0;
       const pct=Math.round(done/STEPS.length*100);
       const date=new Date(r.created_at).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
-      g.innerHTML+=`
-        <div class="run-card" onclick="openRun('${r.id}','${esc(r.name)}','${esc(r.process_type)}')">
-          <div class="run-card-top-bar"></div>
-          <div class="run-card-body">
-            <div class="rc-number">Run · ${r.id.slice(0,8).toUpperCase()}</div>
-            <div class="rc-name">${esc(r.name)}</div>
-            <div class="rc-tags">
-              <span class="rc-tag">${esc(r.process_type)}</span>
-              <span class="rc-tag">${done}/${STEPS.length} Steps</span>
-            </div>
+      g.innerHTML+=`<div class="run-card" onclick="openRun('${r.id}','${esc(r.name)}','${esc(r.process_type)}',${r.wafer_count||1})">
+        <div class="run-card-top-bar"></div>
+        <div class="run-card-body">
+          <div class="rc-number">Run · ${r.id.slice(0,8).toUpperCase()}</div>
+          <div class="rc-name">${esc(r.name)}</div>
+          <div class="rc-tags">
+            <span class="rc-tag">${esc(r.process_type)}</span>
+            <span class="rc-tag">${r.wafer_count||1} Wafer${(r.wafer_count||1)>1?'s':''}</span>
+            <span class="rc-tag">${done}/${STEPS.length} Steps</span>
           </div>
-          <div class="rc-progress-row">
-            <div class="rc-progress-bar-wrap">
-              <div class="rc-progress-label">${pct}% complete · ${date}</div>
-              <div class="rc-progress-track"><div class="rc-progress-fill" style="width:${pct}%"></div></div>
-            </div>
-            <div class="rc-arrow">›</div>
+        </div>
+        <div class="rc-progress-row">
+          <div class="rc-progress-bar-wrap">
+            <div class="rc-progress-label">${pct}% complete · ${date}</div>
+            <div class="rc-progress-track"><div class="rc-progress-fill" style="width:${pct}%"></div></div>
           </div>
-        </div>`;
+          <div class="rc-arrow">›</div>
+        </div>
+      </div>`;
     }
   }catch(e){g.innerHTML='<div class="empty-box">Error loading — check your connection</div>';}
 }
@@ -1344,16 +511,18 @@ function closeModal(){document.getElementById('modal-bd').classList.remove('open
 async function createRun(){
   const name=document.getElementById('new-name').value.trim();
   const type=document.getElementById('new-type').value;
+  const wc=parseInt(document.getElementById('new-wafer-count').value)||1;
   if(!name){toast('Enter a run name');return;}
-  const res=await api('POST','runs','',{name,process_type:type,created_by:CU.name});
+  const res=await api('POST','runs','',{name,process_type:type,wafer_count:wc,created_by:CU.name});
   closeModal();
-  if(Array.isArray(res)&&res[0]) openRun(res[0].id,res[0].name,res[0].process_type);
+  if(Array.isArray(res)&&res[0]) openRun(res[0].id,res[0].name,res[0].process_type,wc);
   else toast('Error creating run — try again');
 }
 
-/* ─── RUNSHEET ─── */
-async function openRun(runId,runName,runType){
+/* OPEN RUN */
+async function openRun(runId,runName,runType,waferCount){
   CRid=runId;
+  RW=Array.from({length:waferCount||1},(_,i)=>`W${i+1}`);
   document.getElementById('dashboard-page').style.display='none';
   document.getElementById('runsheet-page').style.display='block';
   document.getElementById('tn-section').textContent=runName;
@@ -1362,12 +531,18 @@ async function openRun(runId,runName,runType){
   document.getElementById('rs-title').textContent=runName;
   document.getElementById('rs-meta').innerHTML=
     `<span>Opened: ${new Date().toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}</span>
-     <span>Operator: ${CU.name}</span><span>Role: ${CU.role}</span>`;
+     <span>Operator: ${CU.name}</span><span>Role: ${CU.role}</span><span>Wafers: ${waferCount||1}</span>`;
   let entries=[];
   try{entries=await api('GET','runsheet_entries',`run_id=eq.${runId}`);}catch(e){}
   if(!Array.isArray(entries)) entries=[];
+  let insps=[];
+  try{insps=await api('GET','inspections',`run_id=eq.${runId}`);}catch(e){}
+  if(!Array.isArray(insps)) insps=[];
   const c=document.getElementById('steps-container');
-  c.innerHTML=STEPS.map(s=>buildStep(s,entries.find(e=>e.step_number===s.n)||{},runId)).join('');
+  c.innerHTML=STEPS.map(s=>`<div class="step-block">
+    ${buildStep(s,entries.find(e=>e.step_number===s.n)||{},runId)}
+    ${buildInsp(s.n,s.name,insps.find(i=>i.step_number===s.n)||{},runId)}
+  </div>`).join('');
   startSync(runId);
 }
 
@@ -1379,29 +554,61 @@ function showDash(){
   loadRuns();
 }
 
+/* BUILD STEP */
 function buildStep(step,saved,runId){
   const st=saved.status||'PENDING';
   const bc='sb-'+st.toLowerCase().replace(/ /g,'_');
   const cc={'IN_PROGRESS':'s-progress','PASS':'s-pass','FAIL':'s-fail','REWORK':'s-rework'}[st]||'';
   const has=f=>step.f.includes(f);
-  const lu=saved.updated_at
-    ?`Saved ${new Date(saved.updated_at).toLocaleString('en-IN')} by ${saved.operator_name||'—'}`
-    :'Not yet started';
-  return `
-  <div class="step-card ${cc}" id="sc-${step.n}">
+  const lu=saved.updated_at?`Saved ${new Date(saved.updated_at).toLocaleString('en-IN')} by ${saved.operator_name||'—'}`:'Not yet started';
+  const selW=saved.selected_wafers?saved.selected_wafers.split(','):[];
+  const waferHtml=RW.map(w=>`<span class="wafer-chip${selW.includes(w)?' selected':''}" onclick="this.classList.toggle('selected')">${w}</span>`).join('');
+
+  return `<div class="step-card ${cc}" id="sc-${step.n}">
     <div class="step-header" onclick="toggleStep('${step.n}')">
       <div class="step-num-badge">Step ${step.n}</div>
       <div class="step-title-text">${step.name}</div>
-      <div class="step-badge ${bc}">${st.replace('_',' ')}</div>
+      <div class="step-badge ${bc}" id="sbadge-${step.n}">${st.replace('_',' ')}</div>
       <div class="step-chevron">›</div>
     </div>
     <div class="step-body" id="sbd-${step.n}">
+
+      <div class="wm-panel">
+        <div class="wm-title">Wafer &amp; Mass Selection</div>
+        <div class="wm-grid">
+          <div class="wm-field full">
+            <label class="wm-label">Wafers Involved in This Step</label>
+            <div class="wafer-chips-row" id="wc-${step.n}">${waferHtml}</div>
+          </div>
+          <div class="wm-field">
+            <label class="wm-label">Mass Recording Type</label>
+            <select class="wm-select" id="f-${step.n}-mtype">
+              <option value="">— Select —</option>
+              <option value="single" ${saved.mass_type==='single'?'selected':''}>Single mass value</option>
+              <option value="before_after" ${saved.mass_type==='before_after'?'selected':''}>Before &amp; After per wafer</option>
+              <option value="batch" ${saved.mass_type==='batch'?'selected':''}>Total batch mass</option>
+              <option value="individual" ${saved.mass_type==='individual'?'selected':''}>Individual wafer masses</option>
+              <option value="na" ${saved.mass_type==='na'?'selected':''}>Not applicable</option>
+            </select>
+          </div>
+          <div class="wm-field">
+            <label class="wm-label">Mass Value(s)</label>
+            <input class="wm-input" id="f-${step.n}-mval" placeholder="e.g. 248.5g or W1:245g, W2:248g" value="${esc(saved.mass_value||'')}">
+          </div>
+          <div class="wm-field full">
+            <label class="wm-label">Mass Notes</label>
+            <input class="wm-input" id="f-${step.n}-mnotes" placeholder="Balance used, conditions, anomalies…" value="${esc(saved.mass_notes||'')}">
+          </div>
+        </div>
+      </div>
+
       <div class="ref-params">
         <div class="rp-heading">Reference Parameters (Fixed)</div>
         <div class="rp-row"><span class="rp-key">Tool:</span><span class="rp-val">${step.tool}</span></div>
         <div class="rp-row"><span class="rp-key">Recipe:</span><span class="rp-val">${step.recipe}</span></div>
         <div class="rp-row"><span class="rp-key">Notes:</span><span class="rp-val">${step.params}</span></div>
       </div>
+
       <div class="live-form-header">Live Entry — Fill in actual values</div>
       <div class="form-grid">
         ${has('op')?`<div class="fg"><label>Operator Name</label><input id="f-${step.n}-op" value="${esc(saved.operator_name||CU.name)}"></div>`:''}
@@ -1427,25 +634,129 @@ function buildStep(step,saved,runId){
   </div>`;
 }
 
+/* BUILD INSPECTION */
+function buildInsp(sn,sname,saved,runId){
+  const st=saved.status||'PENDING';
+  const bc='ib-'+st.toLowerCase();
+  const lu=saved.updated_at?`Saved ${new Date(saved.updated_at).toLocaleString('en-IN')} by ${saved.operator_name||'—'}`:'Not yet recorded';
+  const savedG=saved.geometry_checks?saved.geometry_checks.split(','):[];
+  const dr=saved.dry_run||'';
+
+  return `<div class="insp-card" id="ic-${sn}">
+    <div class="insp-header" onclick="toggleInsp('${sn}')">
+      <div class="insp-tag">INSP</div>
+      <div class="insp-title-text">Post-Step ${sn} Inspection — ${sname}</div>
+      <div class="insp-badge ${bc}" id="ibadge-${sn}">${st}</div>
+      <div class="insp-chevron">›</div>
+    </div>
+    <div class="insp-body" id="ibdy-${sn}">
+
+      <div class="isec-title">Dry Run Check</div>
+      <div class="dry-row">
+        <div class="dry-label">🧪 Dry Run Performed?</div>
+        <div class="dry-opts">
+          <div class="dry-opt${dr==='Yes'?' on':''}" onclick="pickDry(this,'${sn}','Yes')">Yes</div>
+          <div class="dry-opt${dr==='No'?' on':''}" onclick="pickDry(this,'${sn}','No')">No</div>
+          <div class="dry-opt${dr==='N/A'?' on':''}" onclick="pickDry(this,'${sn}','N/A')">N/A</div>
+        </div>
+      </div>
+      <input type="hidden" id="i-${sn}-dr" value="${esc(dr)}">
+
+      <div class="isec-title">Visual Inspection</div>
+      <div class="vgrid">
+        <div class="vf half"><label>Inspector</label><input id="i-${sn}-op" value="${esc(saved.operator_name||CU.name)}"></div>
+        <div class="vf half"><label>Date &amp; Time</label><input type="datetime-local" id="i-${sn}-dt" value="${saved.insp_date?saved.insp_date.slice(0,16):localNow()}"></div>
+        <div class="vf half"><label>Tool / Instrument</label><input id="i-${sn}-tool" placeholder="e.g. Optical microscope" value="${esc(saved.tool_used||'')}"></div>
+        <div class="vf half"><label>Magnification</label><input id="i-${sn}-mag" placeholder="e.g. 100x" value="${esc(saved.magnification||'')}"></div>
+        <div class="vf half">
+          <label>Surface Condition</label>
+          <select id="i-${sn}-surf">
+            <option value="">— Select —</option>
+            ${['Clean','Contaminated','Cracked','Chipped','Haze','Scratches','Particles'].map(o=>`<option${saved.surface_condition===o?' selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div class="vf half">
+          <label>Uniformity</label>
+          <select id="i-${sn}-uni">
+            <option value="">— Select —</option>
+            ${['Uniform','Slightly non-uniform','Non-uniform','Edge effects observed'].map(o=>`<option${saved.uniformity===o?' selected':''}>${o}</option>`).join('')}
+          </select>
+        </div>
+        <div class="vf full"><label>Measurements (thickness, CD, depth, resistance…)</label><textarea id="i-${sn}-meas" placeholder="Record all values with units…">${esc(saved.measurements||'')}</textarea></div>
+        <div class="vf full"><label>Visual Observations &amp; Defects</label><textarea id="i-${sn}-obs" placeholder="Pattern quality, defects, anomalies…">${esc(saved.observations||'')}</textarea></div>
+      </div>
+
+      <div class="isec-title">Geometry Checks</div>
+      <div class="gc-grid" id="gc-${sn}">
+        ${GEOM_CHECKS.map(g=>`<div class="gc-item${savedG.includes(g)?' on':''}" onclick="togGC(this)">
+          <div class="gc-box">${savedG.includes(g)?'✓':''}</div>
+          <div class="gc-text">${g}</div>
+        </div>`).join('')}
+      </div>
+
+      <div class="isec-title">Comments &amp; Verdict</div>
+      <div class="vgrid">
+        <div class="vf full"><label>Additional Comments</label><textarea id="i-${sn}-com" placeholder="Notes, deviations, recommendations…">${esc(saved.comments||'')}</textarea></div>
+        <div class="vf half">
+          <label>Inspection Verdict</label>
+          <select id="i-${sn}-st">
+            <option value="PENDING" ${st==='PENDING'?'selected':''}>Pending</option>
+            <option value="PASS" ${st==='PASS'?'selected':''}>Pass — proceed</option>
+            <option value="REWORK" ${st==='REWORK'?'selected':''}>Rework — redo step</option>
+            <option value="FAIL" ${st==='FAIL'?'selected':''}>Fail — escalate</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="insp-foot">
+        <span class="insp-ts" id="its-${sn}">${lu}</span>
+        <button class="btn-save-insp" onclick="saveInsp('${sn}','${runId}')">Save Inspection</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+/* TOGGLES */
 function toggleStep(n){
   const bd=document.getElementById(`sbd-${n}`);
   bd.classList.toggle('open');
-  const chev=document.querySelector(`#sc-${n} .step-chevron`);
-  if(chev) chev.style.transform=bd.classList.contains('open')?'rotate(90deg)':'';
+  const ch=document.querySelector(`#sc-${n} .step-chevron`);
+  if(ch) ch.style.transform=bd.classList.contains('open')?'rotate(90deg)':'';
+}
+function toggleInsp(n){
+  const bd=document.getElementById(`ibdy-${n}`);
+  bd.classList.toggle('open');
+  const ch=document.querySelector(`#ic-${n} .insp-chevron`);
+  if(ch) ch.style.transform=bd.classList.contains('open')?'rotate(90deg)':'';
+}
+function togGC(el){
+  el.classList.toggle('on');
+  const b=el.querySelector('.gc-box');
+  if(b) b.textContent=el.classList.contains('on')?'✓':'';
+}
+function pickDry(el,sn,val){
+  el.closest('.dry-opts').querySelectorAll('.dry-opt').forEach(o=>o.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById(`i-${sn}-dr`).value=val;
 }
 
+/* SAVE STEP */
 async function saveStep(sn,runId){
   const step=STEPS.find(s=>s.n===sn);
   const btn=document.querySelector(`#sc-${sn} .btn-save`);
-  btn.disabled=true; btn.textContent='Saving…';
+  btn.disabled=true;btn.textContent='Saving…';
   const v=id=>{const el=document.getElementById(`f-${sn}-${id}`);return el?el.value:null;};
+  const selW=Array.from(document.querySelectorAll(`#wc-${sn} .wafer-chip.selected`)).map(c=>c.textContent).join(',');
   const payload={
     run_id:runId,step_number:sn,step_name:step.name,
-    operator_name:v('op')||CU.name, role:CU.role,
+    operator_name:v('op')||CU.name,role:CU.role,
     date_time:v('dt')||new Date().toISOString(),
-    tool_used:v('tool'), recipe:v('rec'), parameters:v('par'),
-    measurements:v('meas'), comments:v('com'),
-    status:v('st')||'PENDING', updated_at:new Date().toISOString()
+    tool_used:v('tool'),recipe:v('rec'),parameters:v('par'),
+    measurements:v('meas'),comments:v('com'),
+    status:v('st')||'PENDING',
+    selected_wafers:selW,
+    mass_type:v('mtype'),mass_value:v('mval'),mass_notes:v('mnotes'),
+    updated_at:new Date().toISOString()
   };
   Object.keys(payload).forEach(k=>payload[k]===null&&delete payload[k]);
   try{
@@ -1455,12 +766,42 @@ async function saveStep(sn,runId){
     refreshStepUI(sn,payload);
     toast('Step saved successfully',true);
   }catch(e){toast('Save failed — check connection');}
-  btn.disabled=false; btn.textContent='Save Step';
+  btn.disabled=false;btn.textContent='Save Step';
 }
 
+/* SAVE INSPECTION */
+async function saveInsp(sn,runId){
+  const btn=document.querySelector(`#ic-${sn} .btn-save-insp`);
+  btn.disabled=true;btn.textContent='Saving…';
+  const v=id=>{const el=document.getElementById(`i-${sn}-${id}`);return el?el.value:null;};
+  const gc=Array.from(document.querySelectorAll(`#gc-${sn} .gc-item.on`)).map(el=>el.querySelector('.gc-text').textContent).join(',');
+  const payload={
+    run_id:runId,step_number:sn,
+    operator_name:v('op')||CU.name,role:CU.role,
+    insp_date:v('dt')||new Date().toISOString(),
+    tool_used:v('tool'),magnification:v('mag'),
+    surface_condition:v('surf'),uniformity:v('uni'),
+    measurements:v('meas'),observations:v('obs'),
+    geometry_checks:gc,dry_run:v('dr'),
+    comments:v('com'),status:v('st')||'PENDING',
+    updated_at:new Date().toISOString()
+  };
+  Object.keys(payload).forEach(k=>payload[k]===null&&delete payload[k]);
+  try{
+    const ex=await api('GET','inspections',`run_id=eq.${runId}&step_number=eq.${sn}`);
+    if(Array.isArray(ex)&&ex.length) await api('PATCH','inspections',`run_id=eq.${runId}&step_number=eq.${sn}`,payload);
+    else await api('POST','inspections','',payload);
+    refreshInspUI(sn,payload);
+    toast('Inspection saved',true);
+  }catch(e){toast('Save failed — check connection');}
+  btn.disabled=false;btn.textContent='Save Inspection';
+}
+
+/* REFRESH UI */
 function refreshStepUI(n,data){
   const card=document.getElementById(`sc-${n}`);
-  const badge=card.querySelector('.step-badge');
+  const badge=document.getElementById(`sbadge-${n}`);
+  if(!card||!badge) return;
   const s=data.status||'PENDING';
   card.className='step-card '+({'IN_PROGRESS':'s-progress','PASS':'s-pass','FAIL':'s-fail','REWORK':'s-rework'}[s]||'');
   badge.className='step-badge sb-'+s.toLowerCase().replace(/ /g,'_');
@@ -1468,22 +809,24 @@ function refreshStepUI(n,data){
   const si=document.getElementById(`si-${n}`);
   if(si) si.textContent=`Saved ${new Date().toLocaleString('en-IN')} by ${data.operator_name}`;
 }
+function refreshInspUI(n,data){
+  const badge=document.getElementById(`ibadge-${n}`);
+  if(!badge) return;
+  const s=data.status||'PENDING';
+  badge.className='insp-badge ib-'+s.toLowerCase();
+  badge.textContent=s;
+  const ts=document.getElementById(`its-${n}`);
+  if(ts) ts.textContent=`Saved ${new Date().toLocaleString('en-IN')} by ${data.operator_name}`;
+}
 
-/* ─── SYNC ─── */
+/* SYNC */
 function startSync(runId){
   pollT=setInterval(async()=>{
     try{
       const entries=await api('GET','runsheet_entries',`run_id=eq.${runId}`);
-      if(!Array.isArray(entries)) return;
-      entries.forEach(e=>{
-        refreshStepUI(e.step_number,e);
-        ['op','dt','tool','rec','par','meas','com','st'].forEach(f=>{
-          const fieldMap={op:'operator_name',dt:'date_time',tool:'tool_used',rec:'recipe',par:'parameters',meas:'measurements',com:'comments',st:'status'};
-          const el=document.getElementById(`f-${e.step_number}-${f}`);
-          const val=e[fieldMap[f]];
-          if(el&&document.activeElement!==el&&val!=null) el.value=val;
-        });
-      });
+      if(Array.isArray(entries)) entries.forEach(e=>refreshStepUI(e.step_number,e));
+      const insps=await api('GET','inspections',`run_id=eq.${runId}`);
+      if(Array.isArray(insps)) insps.forEach(i=>refreshInspUI(i.step_number,i));
     }catch(e){}
   },5000);
   pingPresence(runId);
@@ -1498,20 +841,17 @@ async function pingPresence(runId){
     else await api('POST','presence','',p);
     const all=await api('GET','presence',`run_id=eq.${runId}`);
     if(!Array.isArray(all)) return;
-    const active=all.filter(p=>Date.now()-new Date(p.last_seen).getTime()<30000);
+    const active=all.filter(x=>Date.now()-new Date(x.last_seen).getTime()<30000);
     const chips=document.getElementById('presence-chips');
-    if(chips) chips.innerHTML=active.map(p=>`<span class="presence-chip">${p.operator_name} · ${p.role}</span>`).join('')||'—';
+    if(chips) chips.innerHTML=active.map(x=>`<span class="presence-chip">${x.operator_name} · ${x.role}</span>`).join('')||'—';
   }catch(e){}
 }
 
-/* ─── TOAST ─── */
 let tT;
 function toast(msg,ok=false){
   const t=document.getElementById('toast');
-  t.textContent=msg;
-  t.className='toast'+(ok?' ok':' err');
-  t.style.display='block';
-  clearTimeout(tT);
+  t.textContent=msg;t.className='toast'+(ok?' ok':' err');
+  t.style.display='block';clearTimeout(tT);
   tT=setTimeout(()=>t.style.display='none',3000);
 }
 
